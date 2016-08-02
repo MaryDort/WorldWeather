@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="10174" systemVersion="15F34" minimumToolsVersion="Xcode 7.0">
+    <entity name="MADHourly" representedClassName="MADHourly" syncable="YES">
+        <attribute name="currentTempC" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="currentTempF" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="feelsLikeC" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="feelsLikeF" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="humidity" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="pressure" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="time" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="weatherDesc" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="weatherIconURL" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="windSpeedMiles" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="weather" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MADWeather" inverseName="hourly" inverseEntity="MADWeather" syncable="YES"/>
+    </entity>
+    <entity name="MADWeather" representedClassName="MADWeather" syncable="YES">
+        <attribute name="date" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="maxTempC" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="maxTempF" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="minTempF" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mixTempC" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="moonrise" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="moonset" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="sunrise" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="sunset" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="hourly" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="MADHourly" inverseName="weather" inverseEntity="MADHourly" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="MADHourly" positionX="180" positionY="-15" width="128" height="210"/>
+        <element name="MADWeather" positionX="-63" positionY="-18" width="128" height="195"/>
+    </elements>
+</model>
