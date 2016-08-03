@@ -20,6 +20,10 @@
 
 @property (nonatomic, readwrite, strong) NSFetchedResultsController *fetchedResultsController;
 @property (strong, nonatomic, readwrite) NSManagedObjectContext *managedObjectContext;
+@property (weak, nonatomic) IBOutlet UILabel *humidityValueLabel;
+@property (weak, nonatomic) IBOutlet UILabel *pressureValueLabel;
+@property (weak, nonatomic) IBOutlet UITableView *descriptionValues;
+@property (weak, nonatomic) IBOutlet UILabel *descriptionValueName;
 
 @end
 
