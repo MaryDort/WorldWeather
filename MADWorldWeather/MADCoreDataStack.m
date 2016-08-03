@@ -80,7 +80,7 @@
     
     for (NSDictionary *data in uniqueWeather) {
         MADWeather *weather = (MADWeather *)[NSEntityDescription insertNewObjectForEntityForName:@"MADWeather" inManagedObjectContext:self.managedObjectContext];
-        NSMutableSet *hourlySet = nil;
+        NSMutableSet *hourlySet = [[NSMutableSet alloc] init];
         
         weather.sunrise = data[@"astronomy"][0][@"sunrise"];
         weather.sunset = data[@"astronomy"][0][@"sunset"];
@@ -109,6 +109,7 @@
             [hourlySet addObject:hourly];
         }
         [weather addHourly:hourlySet];
+        NSLog(@"");
     }
     
     if (uniqueWeather.count > 0) {

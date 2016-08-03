@@ -10,6 +10,7 @@
 #import "MADDownloader.h"
 #import "MADCoreDataStack.h"
 #import "CoreData/CoreData.h"
+#import "MADWeatherDescription.h"
 
 @interface ViewController ()
 
@@ -17,13 +18,14 @@
 @property (weak, nonatomic) IBOutlet UILabel *currentWeatherTemp;
 @property (weak, nonatomic) IBOutlet UILabel *weatherDescription;
 @property (weak, nonatomic) IBOutlet UILabel *location;
+@property (weak, nonatomic) IBOutlet UILabel *humidityValueLabel;
+@property (weak, nonatomic) IBOutlet UILabel *pressureValueLabel;
+@property (weak, nonatomic) IBOutlet UITableView *descriptionTabelView;
+@property (weak, nonatomic) IBOutlet UILabel *descriptionTabelName;
 
 @property (nonatomic, readwrite, strong) NSFetchedResultsController *fetchedResultsController;
 @property (strong, nonatomic, readwrite) NSManagedObjectContext *managedObjectContext;
-@property (weak, nonatomic) IBOutlet UILabel *humidityValueLabel;
-@property (weak, nonatomic) IBOutlet UILabel *pressureValueLabel;
-@property (weak, nonatomic) IBOutlet UITableView *descriptionValues;
-@property (weak, nonatomic) IBOutlet UILabel *descriptionValueName;
+@property (nonatomic, readwrite, strong) MADWeatherDescription *weatherDesc;
 
 @end
 
@@ -31,9 +33,11 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    [_descriptionTabelView registerNib:[UINib nibWithNibName:@"MADDescriptionTableViewCell" bundle:nil]
+                forCellReuseIdentifier:@"MADDescriptionTableViewCell"];
     [[MADDownloader sharedAPIDownloader] downloadDataWithCallBack:^(NSArray *results) {
         [[MADCoreDataStack sharedCoreDataStack] saveObjects:results];
+        [self tuneTabelView];
     }];
 }
 
@@ -65,5 +69,13 @@
     
     return _fetchedResultsController;
 }
+
+- (void)tuneTabelView {
+    _weatherDesc = [[MADWeatherDescription alloc] initWithDate:[[NSCalendar currentCalendar] startOfDayForDate:[NSDate date]]];
+    
+    _descriptionTabelView.dataSource = _weatherDesc;
+    [_descriptionTabelView reloadData];
+}
+
 
 @end

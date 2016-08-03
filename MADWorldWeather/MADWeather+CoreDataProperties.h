@@ -2,7 +2,7 @@
 //  MADWeather+CoreDataProperties.h
 //  MADWorldWeather
 //
-//  Created by Mariia Cherniuk on 02.08.16.
+//  Created by Mariia Cherniuk on 03.08.16.
 //  Copyright © 2016 marydort. All rights reserved.
 //
 //  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu

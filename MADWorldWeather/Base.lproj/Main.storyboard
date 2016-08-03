@@ -79,25 +79,25 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kb8-lD-tP9">
                                 <rect key="frame" x="35" y="266" width="250" height="71"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Humidity" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pSN-Ru-Lzz">
-                                        <rect key="frame" x="26" y="50" width="69" height="21"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Pressure" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mga-Zc-Y1F">
+                                        <rect key="frame" x="158" y="50" width="68" height="21"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleCallout"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="2zs-Dj-Tt6">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="humidity" translatesAutoresizingMaskIntoConstraints="NO" id="2zs-Dj-Tt6">
                                         <rect key="frame" x="33" y="1" width="55" height="48"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="48" id="7UR-6Z-TrC"/>
                                             <constraint firstAttribute="width" constant="55" id="IsF-65-O18"/>
                                         </constraints>
                                     </imageView>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="WMq-ur-Oqc">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="pressure" translatesAutoresizingMaskIntoConstraints="NO" id="WMq-ur-Oqc">
                                         <rect key="frame" x="164" y="1" width="56" height="47"/>
                                     </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Pressure" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mga-Zc-Y1F">
-                                        <rect key="frame" x="158" y="50" width="68" height="21"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Humidity" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pSN-Ru-Lzz">
+                                        <rect key="frame" x="26" y="50" width="69" height="21"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleCallout"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -144,8 +144,8 @@
                     <connections>
                         <outlet property="currentWeatherIcon" destination="Gdg-sA-49W" id="dDX-JW-meF"/>
                         <outlet property="currentWeatherTemp" destination="aVD-p0-9qD" id="0d4-ba-yqU"/>
-                        <outlet property="descriptionValueName" destination="ZWa-Pl-zjP" id="kh8-ZZ-SQI"/>
-                        <outlet property="descriptionValues" destination="JuU-G0-D8X" id="vX8-80-t3u"/>
+                        <outlet property="descriptionTabelName" destination="ZWa-Pl-zjP" id="eIc-di-lU1"/>
+                        <outlet property="descriptionTabelView" destination="JuU-G0-D8X" id="aND-RY-pTa"/>
                         <outlet property="humidityValueLabel" destination="pSN-Ru-Lzz" id="urw-2F-4MK"/>
                         <outlet property="location" destination="MiM-xU-SlK" id="WnQ-Pt-5M5"/>
                         <outlet property="pressureValueLabel" destination="mga-Zc-Y1F" id="jZD-Uc-K07"/>
@@ -157,4 +157,8 @@
             <point key="canvasLocation" x="323" y="339"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="humidity" width="64" height="64"/>
+        <image name="pressure" width="64" height="64"/>
+    </resources>
 </document>
