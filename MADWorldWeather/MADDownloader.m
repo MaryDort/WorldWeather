@@ -6,16 +6,16 @@
 //  Copyright © 2016 marydort. All rights reserved.
 //
 
-#import "MADAPIDownloader.h"
+#import "MADDownloader.h"
 
-@implementation MADAPIDownloader
+@implementation MADDownloader
 
 + (instancetype)sharedAPIDownloader {
-    static MADAPIDownloader *_APIDownloader = nil;
+    static MADDownloader *_APIDownloader = nil;
     static dispatch_once_t predicate;
     
     dispatch_once(&predicate, ^{
-        _APIDownloader = [[MADAPIDownloader alloc] init];
+        _APIDownloader = [[MADDownloader alloc] init];
     });
     
     return _APIDownloader;

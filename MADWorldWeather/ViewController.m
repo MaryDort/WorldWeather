@@ -7,7 +7,7 @@
 //
 
 #import "ViewController.h"
-#import "MADAPIDownloader.h"
+#import "MADDownloader.h"
 #import "MADCoreDataStack.h"
 #import "CoreData/CoreData.h"
 
@@ -15,6 +15,9 @@
 
 @property (weak, nonatomic) IBOutlet UIImageView *currentWeatherIcon;
 @property (weak, nonatomic) IBOutlet UILabel *currentWeatherTemp;
+@property (weak, nonatomic) IBOutlet UILabel *weatherDescription;
+@property (weak, nonatomic) IBOutlet UILabel *location;
+
 @property (nonatomic, readwrite, strong) NSFetchedResultsController *fetchedResultsController;
 @property (strong, nonatomic, readwrite) NSManagedObjectContext *managedObjectContext;
 
@@ -25,7 +28,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [[MADAPIDownloader sharedAPIDownloader] downloadDataWithCallBack:^(NSArray *results) {
+    [[MADDownloader sharedAPIDownloader] downloadDataWithCallBack:^(NSArray *results) {
         [[MADCoreDataStack sharedCoreDataStack] saveObjects:results];
     }];
 }

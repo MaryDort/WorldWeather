@@ -13,13 +13,13 @@
 		84AD17BB1D50A0B4003FB8E2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84AD17B91D50A0B4003FB8E2 /* Main.storyboard */; };
 		84AD17BD1D50A0B4003FB8E2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 84AD17BC1D50A0B4003FB8E2 /* Assets.xcassets */; };
 		84AD17C01D50A0B4003FB8E2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84AD17BE1D50A0B4003FB8E2 /* LaunchScreen.storyboard */; };
-		84AD17C91D50AC71003FB8E2 /* MADAPIDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 84AD17C81D50AC71003FB8E2 /* MADAPIDownloader.m */; };
+		84AD17C91D50AC71003FB8E2 /* MADDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 84AD17C81D50AC71003FB8E2 /* MADDownloader.m */; };
 		84AD17CC1D50B721003FB8E2 /* MADCoreDataStack.m in Sources */ = {isa = PBXBuildFile; fileRef = 84AD17CB1D50B721003FB8E2 /* MADCoreDataStack.m */; };
 		84AD17CF1D50B9A8003FB8E2 /* worldWeatherModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 84AD17CD1D50B9A8003FB8E2 /* worldWeatherModel.xcdatamodeld */; };
-		84AD17F01D50DE66003FB8E2 /* MADWeather+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 84AD17E91D50DE66003FB8E2 /* MADWeather+CoreDataProperties.m */; };
-		84AD17F11D50DE66003FB8E2 /* MADWeather.m in Sources */ = {isa = PBXBuildFile; fileRef = 84AD17EB1D50DE66003FB8E2 /* MADWeather.m */; };
-		84AD17F21D50DE66003FB8E2 /* MADHourly+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 84AD17ED1D50DE66003FB8E2 /* MADHourly+CoreDataProperties.m */; };
-		84AD17F31D50DE66003FB8E2 /* MADHourly.m in Sources */ = {isa = PBXBuildFile; fileRef = 84AD17EF1D50DE66003FB8E2 /* MADHourly.m */; };
+		84AD17FC1D50F4E2003FB8E2 /* MADWeather+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 84AD17F51D50F4E2003FB8E2 /* MADWeather+CoreDataProperties.m */; };
+		84AD17FD1D50F4E2003FB8E2 /* MADWeather.m in Sources */ = {isa = PBXBuildFile; fileRef = 84AD17F71D50F4E2003FB8E2 /* MADWeather.m */; };
+		84AD17FE1D50F4E2003FB8E2 /* MADHourly+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 84AD17F91D50F4E2003FB8E2 /* MADHourly+CoreDataProperties.m */; };
+		84AD17FF1D50F4E2003FB8E2 /* MADHourly.m in Sources */ = {isa = PBXBuildFile; fileRef = 84AD17FB1D50F4E2003FB8E2 /* MADHourly.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,19 +33,19 @@
 		84AD17BC1D50A0B4003FB8E2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		84AD17BF1D50A0B4003FB8E2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		84AD17C11D50A0B4003FB8E2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		84AD17C71D50AC71003FB8E2 /* MADAPIDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADAPIDownloader.h; sourceTree = "<group>"; };
-		84AD17C81D50AC71003FB8E2 /* MADAPIDownloader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADAPIDownloader.m; sourceTree = "<group>"; };
+		84AD17C71D50AC71003FB8E2 /* MADDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDownloader.h; sourceTree = "<group>"; };
+		84AD17C81D50AC71003FB8E2 /* MADDownloader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDownloader.m; sourceTree = "<group>"; };
 		84AD17CA1D50B721003FB8E2 /* MADCoreDataStack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADCoreDataStack.h; sourceTree = "<group>"; };
 		84AD17CB1D50B721003FB8E2 /* MADCoreDataStack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADCoreDataStack.m; sourceTree = "<group>"; };
 		84AD17CE1D50B9A8003FB8E2 /* worldWeatherModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = worldWeatherModel.xcdatamodel; sourceTree = "<group>"; };
-		84AD17E81D50DE66003FB8E2 /* MADWeather+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "MADWeather+CoreDataProperties.h"; path = "MADWorldWeather/MADWeather+CoreDataProperties.h"; sourceTree = "<group>"; };
-		84AD17E91D50DE66003FB8E2 /* MADWeather+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "MADWeather+CoreDataProperties.m"; path = "MADWorldWeather/MADWeather+CoreDataProperties.m"; sourceTree = "<group>"; };
-		84AD17EA1D50DE66003FB8E2 /* MADWeather.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADWeather.h; path = MADWorldWeather/MADWeather.h; sourceTree = "<group>"; };
-		84AD17EB1D50DE66003FB8E2 /* MADWeather.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADWeather.m; path = MADWorldWeather/MADWeather.m; sourceTree = "<group>"; };
-		84AD17EC1D50DE66003FB8E2 /* MADHourly+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "MADHourly+CoreDataProperties.h"; path = "MADWorldWeather/MADHourly+CoreDataProperties.h"; sourceTree = "<group>"; };
-		84AD17ED1D50DE66003FB8E2 /* MADHourly+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "MADHourly+CoreDataProperties.m"; path = "MADWorldWeather/MADHourly+CoreDataProperties.m"; sourceTree = "<group>"; };
-		84AD17EE1D50DE66003FB8E2 /* MADHourly.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADHourly.h; path = MADWorldWeather/MADHourly.h; sourceTree = "<group>"; };
-		84AD17EF1D50DE66003FB8E2 /* MADHourly.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADHourly.m; path = MADWorldWeather/MADHourly.m; sourceTree = "<group>"; };
+		84AD17F41D50F4E2003FB8E2 /* MADWeather+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "MADWeather+CoreDataProperties.h"; path = "MADWorldWeather/MADWeather+CoreDataProperties.h"; sourceTree = "<group>"; };
+		84AD17F51D50F4E2003FB8E2 /* MADWeather+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "MADWeather+CoreDataProperties.m"; path = "MADWorldWeather/MADWeather+CoreDataProperties.m"; sourceTree = "<group>"; };
+		84AD17F61D50F4E2003FB8E2 /* MADWeather.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADWeather.h; path = MADWorldWeather/MADWeather.h; sourceTree = "<group>"; };
+		84AD17F71D50F4E2003FB8E2 /* MADWeather.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADWeather.m; path = MADWorldWeather/MADWeather.m; sourceTree = "<group>"; };
+		84AD17F81D50F4E2003FB8E2 /* MADHourly+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "MADHourly+CoreDataProperties.h"; path = "MADWorldWeather/MADHourly+CoreDataProperties.h"; sourceTree = "<group>"; };
+		84AD17F91D50F4E2003FB8E2 /* MADHourly+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "MADHourly+CoreDataProperties.m"; path = "MADWorldWeather/MADHourly+CoreDataProperties.m"; sourceTree = "<group>"; };
+		84AD17FA1D50F4E2003FB8E2 /* MADHourly.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADHourly.h; path = MADWorldWeather/MADHourly.h; sourceTree = "<group>"; };
+		84AD17FB1D50F4E2003FB8E2 /* MADHourly.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADHourly.m; path = MADWorldWeather/MADHourly.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,14 +62,14 @@
 		84AD17A41D50A0B4003FB8E2 = {
 			isa = PBXGroup;
 			children = (
-				84AD17E81D50DE66003FB8E2 /* MADWeather+CoreDataProperties.h */,
-				84AD17E91D50DE66003FB8E2 /* MADWeather+CoreDataProperties.m */,
-				84AD17EA1D50DE66003FB8E2 /* MADWeather.h */,
-				84AD17EB1D50DE66003FB8E2 /* MADWeather.m */,
-				84AD17EC1D50DE66003FB8E2 /* MADHourly+CoreDataProperties.h */,
-				84AD17ED1D50DE66003FB8E2 /* MADHourly+CoreDataProperties.m */,
-				84AD17EE1D50DE66003FB8E2 /* MADHourly.h */,
-				84AD17EF1D50DE66003FB8E2 /* MADHourly.m */,
+				84AD17F41D50F4E2003FB8E2 /* MADWeather+CoreDataProperties.h */,
+				84AD17F51D50F4E2003FB8E2 /* MADWeather+CoreDataProperties.m */,
+				84AD17F61D50F4E2003FB8E2 /* MADWeather.h */,
+				84AD17F71D50F4E2003FB8E2 /* MADWeather.m */,
+				84AD17F81D50F4E2003FB8E2 /* MADHourly+CoreDataProperties.h */,
+				84AD17F91D50F4E2003FB8E2 /* MADHourly+CoreDataProperties.m */,
+				84AD17FA1D50F4E2003FB8E2 /* MADHourly.h */,
+				84AD17FB1D50F4E2003FB8E2 /* MADHourly.m */,
 				84AD17AF1D50A0B4003FB8E2 /* MADWorldWeather */,
 				84AD17AE1D50A0B4003FB8E2 /* Products */,
 			);
@@ -90,8 +90,8 @@
 				84AD17B41D50A0B4003FB8E2 /* AppDelegate.m */,
 				84AD17B61D50A0B4003FB8E2 /* ViewController.h */,
 				84AD17B71D50A0B4003FB8E2 /* ViewController.m */,
-				84AD17C71D50AC71003FB8E2 /* MADAPIDownloader.h */,
-				84AD17C81D50AC71003FB8E2 /* MADAPIDownloader.m */,
+				84AD17C71D50AC71003FB8E2 /* MADDownloader.h */,
+				84AD17C81D50AC71003FB8E2 /* MADDownloader.m */,
 				84AD17CA1D50B721003FB8E2 /* MADCoreDataStack.h */,
 				84AD17CB1D50B721003FB8E2 /* MADCoreDataStack.m */,
 				84AD17B91D50A0B4003FB8E2 /* Main.storyboard */,
@@ -183,11 +183,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				84AD17C91D50AC71003FB8E2 /* MADAPIDownloader.m in Sources */,
-				84AD17F31D50DE66003FB8E2 /* MADHourly.m in Sources */,
-				84AD17F11D50DE66003FB8E2 /* MADWeather.m in Sources */,
-				84AD17F21D50DE66003FB8E2 /* MADHourly+CoreDataProperties.m in Sources */,
-				84AD17F01D50DE66003FB8E2 /* MADWeather+CoreDataProperties.m in Sources */,
+				84AD17C91D50AC71003FB8E2 /* MADDownloader.m in Sources */,
+				84AD17FF1D50F4E2003FB8E2 /* MADHourly.m in Sources */,
+				84AD17FD1D50F4E2003FB8E2 /* MADWeather.m in Sources */,
+				84AD17FE1D50F4E2003FB8E2 /* MADHourly+CoreDataProperties.m in Sources */,
+				84AD17FC1D50F4E2003FB8E2 /* MADWeather+CoreDataProperties.m in Sources */,
 				84AD17B81D50A0B4003FB8E2 /* ViewController.m in Sources */,
 				84AD17B51D50A0B4003FB8E2 /* AppDelegate.m in Sources */,
 				84AD17CC1D50B721003FB8E2 /* MADCoreDataStack.m in Sources */,

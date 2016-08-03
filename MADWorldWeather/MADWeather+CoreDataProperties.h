@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface MADWeather (CoreDataProperties)
 
-@property (nullable, nonatomic, retain) NSString *date;
+@property (nullable, nonatomic, retain) NSDate *date;
 @property (nullable, nonatomic, retain) NSString *maxTempC;
 @property (nullable, nonatomic, retain) NSString *maxTempF;
 @property (nullable, nonatomic, retain) NSString *minTempF;

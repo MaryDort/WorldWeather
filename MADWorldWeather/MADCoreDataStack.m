@@ -23,6 +23,8 @@
     return coreDataStack;
 }
 
+#pragma mark - get CoreDataStack
+
 - (NSManagedObjectModel *)managedObjectModel {
     if (_managedObjectModel) {
         return _managedObjectModel;
@@ -73,7 +75,8 @@
 }
 
 - (void)saveObjects:(NSArray *)results {
-    NSArray *uniqueWeather = [self uniquenessCheck:results];
+    NSArray *workingDates = [self prepareDateForWork:[results valueForKeyPath:@"date"]];
+    NSArray *uniqueWeather = [self uniquenessCheck:[self prepareArrayForWork:results substitutionalResource:workingDates]];
     
     for (NSDictionary *data in uniqueWeather) {
         MADWeather *weather = (MADWeather *)[NSEntityDescription insertNewObjectForEntityForName:@"MADWeather" inManagedObjectContext:self.managedObjectContext];
@@ -100,8 +103,6 @@
             hourly.pressure = hourlyData[@"pressure"];
             hourly.weatherIconURL = hourlyData[@"weatherIconUrl"][0][@"value"];
             hourly.humidity = hourlyData[@"humidity"];
-            
-            NSLog(@"%@", hourlyData[@"weatherIconUrl"][0][@"value"]);
             hourly.feelsLikeF = hourlyData[@"FeelsLikeF"];
             hourly.feelsLikeC = hourlyData[@"FeelsLikeC"];
             
@@ -115,16 +116,37 @@
     }
 }
 
-- (NSArray *)uniquenessCheck:(NSArray *)islands {
-    NSArray *islandsName = [islands valueForKeyPath:@"date"];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"date IN %@", islandsName];
+- (NSArray *)prepareDateForWork:(NSArray *)datesString {
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    NSMutableArray *newDates = [[NSMutableArray alloc] init];
+    
+    [dateFormatter setDateFormat:@"yyyy-MM-dd"];
+    
+    for (NSString *date in datesString) {
+        [newDates addObject:[dateFormatter dateFromString:date]];
+    }
+    
+    return newDates;
+}
+
+- (NSArray *)prepareArrayForWork:(NSArray *)source substitutionalResource:(NSArray *)substitutionalResource {
+    for (NSInteger i = 0; i < source.count; i++) {
+        [source[i] setValue:substitutionalResource[i] forKeyPath:@"date"];
+    }
+    
+    return source;
+}
+
+- (NSArray *)uniquenessCheck:(NSArray *)weathers {
+    NSArray *weatherDates = [weathers valueForKeyPath:@"date"];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"date IN %@", weatherDates];
     NSArray *response = [[self fetchingDistinctValueByPredicate:predicate] valueForKeyPath:@"date"];
     NSPredicate *filterPredicate = [NSPredicate predicateWithBlock:
                                     ^BOOL(NSDictionary *evaluatedObject, NSDictionary *bindings) {
                                         return ![response containsObject:evaluatedObject[@"date"]];
                                     }];
     
-    return [islands filteredArrayUsingPredicate:filterPredicate];
+    return [weathers filteredArrayUsingPredicate:filterPredicate];
 }
 
 - (NSArray *)fetchingDistinctValueByPredicate:(NSPredicate *)predicate {
