@@ -11,6 +11,6 @@
 
 @interface MADWeatherDescription : NSObject <UITableViewDataSource>
 
-- (instancetype)initWithDate:(NSDate *)date;
+- (instancetype)initWithDate:(NSDate *)date hourlyInfo:(NSArray *)hourlyInfo;
 
 @end

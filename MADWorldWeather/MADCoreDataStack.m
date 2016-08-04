@@ -75,7 +75,7 @@
 }
 
 - (void)saveObjects:(NSArray *)results {
-    NSArray *workingDates = [self prepareDateForWork:[results valueForKeyPath:@"date"]];
+    NSArray *workingDates = [self castingDate:[results valueForKeyPath:@"date"]];
     NSArray *uniqueWeather = [self uniquenessCheck:[self prepareArrayForWork:results substitutionalResource:workingDates]];
     
     for (NSDictionary *data in uniqueWeather) {
@@ -95,7 +95,7 @@
         for (NSDictionary *hourlyData in data[@"hourly"]) {
             MADHourly *hourly = (MADHourly *)[NSEntityDescription insertNewObjectForEntityForName:@"MADHourly" inManagedObjectContext:self.managedObjectContext];
             
-            hourly.time = hourlyData[@"time"];
+            hourly.time = [NSNumber numberWithInteger:[hourlyData[@"time"] integerValue]/100];
             hourly.weatherDesc = hourlyData[@"weatherDesc"][0][@"value"];
             hourly.currentTempC = hourlyData[@"tempC"];
             hourly.currentTempF = hourlyData[@"tempF"];
@@ -109,7 +109,6 @@
             [hourlySet addObject:hourly];
         }
         [weather addHourly:hourlySet];
-        NSLog(@"");
     }
     
     if (uniqueWeather.count > 0) {
@@ -117,7 +116,8 @@
     }
 }
 
-- (NSArray *)prepareDateForWork:(NSArray *)datesString {
+- (NSArray *)castingDate:(NSArray *)datesString {
+//    casting NSString date to NSDate
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     NSMutableArray *newDates = [[NSMutableArray alloc] init];
     

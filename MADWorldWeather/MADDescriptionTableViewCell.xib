@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -34,18 +34,18 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="yLB-1s-ig8">
-                        <rect key="frame" x="149" y="0.0" width="60" height="99"/>
+                        <rect key="frame" x="149" y="8" width="60" height="85"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="60" id="6P1-Tq-edR"/>
                         </constraints>
                     </imageView>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="yLB-1s-ig8" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="9zl-t8-kX8"/>
+                    <constraint firstItem="yLB-1s-ig8" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" constant="1" id="9zl-t8-kX8"/>
                     <constraint firstItem="i51-S8-1b8" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="-8" id="FEa-Q2-2bD"/>
                     <constraint firstAttribute="bottomMargin" secondItem="i51-S8-1b8" secondAttribute="bottom" constant="-8" id="Mdf-RB-Igx"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="yLB-1s-ig8" secondAttribute="bottom" constant="-8" id="TKe-Zg-OOw"/>
-                    <constraint firstItem="yLB-1s-ig8" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="-8" id="WYi-Bn-P6C"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="yLB-1s-ig8" secondAttribute="bottom" constant="-2" id="TKe-Zg-OOw"/>
+                    <constraint firstItem="yLB-1s-ig8" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="WYi-Bn-P6C"/>
                     <constraint firstItem="yLB-1s-ig8" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="Zof-jw-Cme"/>
                     <constraint firstAttribute="trailingMargin" secondItem="i51-S8-1b8" secondAttribute="trailing" constant="-8" id="d6V-0Y-uUj"/>
                     <constraint firstItem="aXk-1I-ylp" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="-8" id="l2a-ZP-3ii"/>

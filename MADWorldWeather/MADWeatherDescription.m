@@ -18,16 +18,18 @@
 @property (nonatomic, readwrite, strong) NSFetchedResultsController *fetchedResultsController;
 @property (strong, nonatomic, readwrite) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, readwrite, strong) NSDate *date;
+@property (nonatomic, readwrite, strong) NSArray *hourlyInfo;
 
 @end
 
 @implementation MADWeatherDescription
 
-- (instancetype)initWithDate:(NSDate *)date {
+- (instancetype)initWithDate:(NSDate *)date hourlyInfo:(NSArray *)hourlyInfo {
     self = [super init];
     
     if (self) {
-        _date = [self prepareDateForWork:date];
+        _date = date;
+        _hourlyInfo = [self prepareHourlyForWork:hourlyInfo];
     }
     
     return self;
@@ -36,22 +38,21 @@
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return self.fetchedResultsController.sections.count;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    id <NSFetchedResultsSectionInfo> sectionInfo = self.fetchedResultsController.sections[section];
+
+    NSLog(@"%lu", (unsigned long)_hourlyInfo.count);
     
-    NSLog(@"%lu", (unsigned long)sectionInfo.numberOfObjects);
-    
-    return sectionInfo.numberOfObjects;
+    return _hourlyInfo.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     MADDescriptionTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MADDescriptionTableViewCell"];
-    MADHourly *hourly = (MADHourly *)[self.fetchedResultsController objectAtIndexPath:indexPath];
+    MADHourly *hourly = [_hourlyInfo objectAtIndex:indexPath.row];
 
-    cell.timeLabel.text = [NSString stringWithFormat:@"%@:00", [hourly.time substringToIndex:hourly.time.length - 2]];
+    cell.timeLabel.text = [NSString stringWithFormat:@"%@:00", hourly.time];
     cell.tempLabel.text = [NSString stringWithFormat:@"%@°", hourly.currentTempC];
     
     if (!hourly.icon) {
@@ -97,12 +98,10 @@
     return _fetchedResultsController;
 }
 
-- (NSDate *)prepareDateForWork:(NSDate *)date {
-    NSDateFormatter * formatter = [NSDateFormatter new];
+- (NSArray *)prepareHourlyForWork:(NSArray *)objects {
+    NSSortDescriptor *sortDesc = [NSSortDescriptor sortDescriptorWithKey:@"time" ascending:YES];
     
-    [formatter setDateFormat:@"yyyy-MM-dd"];
-
-    return [formatter dateFromString:[formatter stringFromDate:date]];
+    return [objects sortedArrayUsingDescriptors:@[sortDesc]];
 }
 
 @end

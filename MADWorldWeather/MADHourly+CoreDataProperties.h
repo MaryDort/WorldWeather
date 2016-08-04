@@ -2,7 +2,7 @@
 //  MADHourly+CoreDataProperties.h
 //  MADWorldWeather
 //
-//  Created by Mariia Cherniuk on 03.08.16.
+//  Created by Mariia Cherniuk on 04.08.16.
 //  Copyright © 2016 marydort. All rights reserved.
 //
 //  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
@@ -20,12 +20,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSString *feelsLikeC;
 @property (nullable, nonatomic, retain) NSString *feelsLikeF;
 @property (nullable, nonatomic, retain) NSString *humidity;
+@property (nullable, nonatomic, retain) NSData *icon;
 @property (nullable, nonatomic, retain) NSString *pressure;
-@property (nullable, nonatomic, retain) NSString *time;
+@property (nullable, nonatomic, retain) NSNumber *time;
 @property (nullable, nonatomic, retain) NSString *weatherDesc;
 @property (nullable, nonatomic, retain) NSString *weatherIconURL;
 @property (nullable, nonatomic, retain) NSString *windSpeedMiles;
-@property (nullable, nonatomic, retain) NSData *icon;
 @property (nullable, nonatomic, retain) MADWeather *weather;
 
 @end
