@@ -21,7 +21,7 @@
     return _APIDownloader;
 }
 
-- (void)downloadDataWithCallBack:(void (^)(NSArray *results))callBack {
+- (void)downloadDataWithCallBack:(void (^)(NSDictionary *results))callBack {
     [self loadDataWithURL:@"http://api.worldweatheronline.com/premium/v1/weather.ashx?key=eb8899f2e04349c298291316160208&q=Kiev&format=json&num_of_days=7" callBack:^(NSData *data) {
         //        Check for JSON error
         NSError *JSONerror;
@@ -30,7 +30,7 @@
         if (JSONerror) {
             NSLog(@"Error: Couldn't parse response: %@", JSONerror);
         }
-        callBack(results[@"data"][@"weather"]);
+        callBack(results);
     }];
 }
 

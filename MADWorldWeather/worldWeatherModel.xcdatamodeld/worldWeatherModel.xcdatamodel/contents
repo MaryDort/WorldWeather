@@ -3,10 +3,12 @@
     <entity name="MADHourly" representedClassName="MADHourly" syncable="YES">
         <attribute name="currentTempC" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="currentTempF" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="date" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="feelsLikeC" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="feelsLikeF" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="humidity" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="icon" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="observationTime" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="pressure" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="time" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="weatherDesc" optional="YES" attributeType="String" syncable="YES"/>
@@ -18,8 +20,8 @@
         <attribute name="date" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="maxTempC" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="maxTempF" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="minTempC" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="minTempF" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="mixTempC" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="moonrise" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="moonset" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="sunrise" optional="YES" attributeType="String" syncable="YES"/>
@@ -27,7 +29,7 @@
         <relationship name="hourly" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="MADHourly" inverseName="weather" inverseEntity="MADHourly" syncable="YES"/>
     </entity>
     <elements>
-        <element name="MADHourly" positionX="180" positionY="-15" width="128" height="225"/>
-        <element name="MADWeather" positionX="-63" positionY="-18" width="128" height="193"/>
+        <element name="MADHourly" positionX="180" positionY="-15" width="128" height="255"/>
+        <element name="MADWeather" positionX="-63" positionY="-18" width="128" height="195"/>
     </elements>
 </model>

@@ -42,9 +42,6 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-
-    NSLog(@"%lu", (unsigned long)_hourlyInfo.count);
-    
     return _hourlyInfo.count;
 }
 
@@ -66,37 +63,7 @@
     return cell;
 }
 
-- (NSFetchedResultsController *)fetchedResultsController {
-    if (_fetchedResultsController) {
-        return _fetchedResultsController;
-    }
-
-    _managedObjectContext = [[MADCoreDataStack sharedCoreDataStack] managedObjectContext];
-    NSFetchRequest *request = [[NSFetchRequest alloc] init];
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"time" ascending:YES];
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"MADHourly"
-                                              inManagedObjectContext:_managedObjectContext];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"weather.date == %@", _date];
-
-    request.entity = entity;
-    request.fetchBatchSize = 4;
-    request.sortDescriptors = @[sortDescriptor];
-    request.predicate = predicate;
-    
-    NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc]
-                                                             initWithFetchRequest:request
-                                                             managedObjectContext:_managedObjectContext
-                                                             sectionNameKeyPath:nil
-                                                             cacheName:nil];
-    _fetchedResultsController = aFetchedResultsController;
-    
-    NSError *error = nil;
-    if (![_fetchedResultsController performFetch:&error]) {
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-    }
-    
-    return _fetchedResultsController;
-}
+#pragma mark - Private
 
 - (NSArray *)prepareHourlyForWork:(NSArray *)objects {
     NSSortDescriptor *sortDesc = [NSSortDescriptor sortDescriptorWithKey:@"time" ascending:YES];
