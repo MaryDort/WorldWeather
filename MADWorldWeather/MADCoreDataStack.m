@@ -75,24 +75,23 @@
 }
 
 - (void)saveObjects:(NSDictionary *)results {
-    NSArray *uniqueCurrentCondition = [self uniquenessCurrentConditionCheck:results[@"data"][@"current_condition"][0][@"observation_time"]];
+    BOOL uniqueCurrentCondition = [self uniquenessCurrentConditionCheck:results[@"data"][@"current_condition"][0][@"observation_time"]];
     
-    if (uniqueCurrentCondition != nil) {
-        [self.managedObjectContext deleteObject:uniqueCurrentCondition.firstObject];
+    if (!uniqueCurrentCondition) {
+        MADHourly *currentCondition = (MADHourly *)[NSEntityDescription insertNewObjectForEntityForName:@"MADHourly" inManagedObjectContext:self.managedObjectContext];
+        
+        currentCondition.date = [[NSCalendar currentCalendar] startOfDayForDate:[NSDate date]];
+        currentCondition.weatherDesc = results[@"data"][@"current_condition"][0][@"weatherDesc"][0][@"value"];
+        currentCondition.currentTempC = results[@"data"][@"current_condition"][0][@"temp_C"];
+        currentCondition.currentTempF = results[@"data"][@"current_condition"][0][@"temp_F"];
+        currentCondition.windSpeedMiles = results[@"data"][@"current_condition"][0][@"windspeedMiles"];
+        currentCondition.pressure = results[@"data"][@"current_condition"][0][@"pressure"];
+        currentCondition.weatherIconURL = results[@"data"][@"current_condition"][0][@"weatherIconUrl"][0][@"value"];
+        currentCondition.humidity = results[@"data"][@"current_condition"][0][@"humidity"];
+        currentCondition.feelsLikeF = results[@"data"][@"current_condition"][0][@"FeelsLikeF"];
+        currentCondition.feelsLikeC = results[@"data"][@"current_condition"][0][@"FeelsLikeC"];
+        currentCondition.observationTime = results[@"data"][@"current_condition"][0][@"observation_time"];
     }
-    MADHourly *currentCondition = (MADHourly *)[NSEntityDescription insertNewObjectForEntityForName:@"MADHourly" inManagedObjectContext:self.managedObjectContext];
-    
-    currentCondition.date = [[NSCalendar currentCalendar] startOfDayForDate:[NSDate date]];
-    currentCondition.weatherDesc = results[@"data"][@"current_condition"][0][@"weatherDesc"][0][@"value"];
-    currentCondition.currentTempC = results[@"data"][@"current_condition"][0][@"temp_C"];
-    currentCondition.currentTempF = results[@"data"][@"current_condition"][0][@"temp_F"];
-    currentCondition.windSpeedMiles = results[@"data"][@"current_condition"][0][@"windspeedMiles"];
-    currentCondition.pressure = results[@"data"][@"current_condition"][0][@"pressure"];
-    currentCondition.weatherIconURL = results[@"data"][@"current_condition"][0][@"weatherIconUrl"][0][@"value"];
-    currentCondition.humidity = results[@"data"][@"current_condition"][0][@"humidity"];
-    currentCondition.feelsLikeF = results[@"data"][@"current_condition"][0][@"FeelsLikeF"];
-    currentCondition.feelsLikeC = results[@"data"][@"current_condition"][0][@"FeelsLikeC"];
-    currentCondition.observationTime = results[@"data"][@"current_condition"][0][@"observation_time"];
     
     NSArray *workingDates = [self castingDate:[results[@"data"][@"weather"] valueForKeyPath:@"date"]];
     NSArray *uniqueWeather = [self uniquenessWeatherCheck:[self prepareArrayForWork:results[@"data"][@"weather"] substitutionalResource:workingDates]];
@@ -146,7 +145,8 @@
     return newDates;
 }
 
-- (NSArray *)prepareArrayForWork:(NSArray *)source substitutionalResource:(NSArray *)substitutionalResource {
+- (NSArray *)prepareArrayForWork:(NSArray *)source
+          substitutionalResource:(NSArray *)substitutionalResource {
     for (NSInteger i = 0; i < source.count; i++) {
         [source[i] setValue:substitutionalResource[i] forKeyPath:@"date"];
     }
@@ -154,16 +154,24 @@
     return source;
 }
 
-- (NSArray *)uniquenessCurrentConditionCheck:(NSString *)currentConditionTime {
+- (BOOL)uniquenessCurrentConditionCheck:(NSString *)currentConditionTime {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"observationTime == %@ && date = %@", currentConditionTime, [[NSCalendar currentCalendar] startOfDayForDate:[NSDate date]]];
     NSArray *response = [[self fetchingDistinctValueByPredicate:predicate entityName:@"MADHourly"] valueForKeyPath:@"observationTime"];
     
-    if (response.count > 0) {
-        return response;
-    } else {
-        return nil;
-    }
+//        перевірити чи є в базі
+    if (response.count == 0) {
+//        немає, перевірити чи є попередій
+        NSPredicate *predicate2 = [NSPredicate predicateWithFormat:@"observationTime != %@", nil];
+        NSArray *response2 = [[self fetchingDistinctValueByPredicate:predicate2 entityName:@"MADHourly"] valueForKeyPath:@"observationTime"];
 
+        if (response2.count != 0) {
+//        є, видалити попередній з бази
+            [self.managedObjectContext deleteObject:response2.firstObject];
+        }
+        return NO;
+    } else {
+        return YES;
+    }
 }
 
 - (NSArray *)uniquenessWeatherCheck:(NSArray *)weathers {

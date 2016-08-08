@@ -1,24 +1,21 @@
 //
-//  MADDescriptionTableViewCell.m
+//  MADForecastWeatherTableViewCell.m
 //  MADWorldWeather
 //
-//  Created by Mariia Cherniuk on 03.08.16.
+//  Created by Mariia Cherniuk on 05.08.16.
 //  Copyright © 2016 marydort. All rights reserved.
 //
 
-#import "MADDescriptionTableViewCell.h"
+#import "MADForecastWeatherTableViewCell.h"
 
-@implementation MADDescriptionTableViewCell
+@implementation MADForecastWeatherTableViewCell
 
 - (void)awakeFromNib {
     [super awakeFromNib];
-    // Initialization code
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
 }
 
 @end

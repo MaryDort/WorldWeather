@@ -12,7 +12,7 @@
 
 + (instancetype)sharedAPIDownloader;
 
-- (void)downloadDataWithCallBack:(void (^)(NSDictionary *results))callBack;
+- (void)downloadDataWithLocationName:(NSString *)locationName days:(NSNumber *)days callBack:(void (^)(NSDictionary *results))callBack;
 - (void)downloadDataWithURL:(NSString *)url callBack:(void (^)(NSData *imageData))callBack;
 
 @end

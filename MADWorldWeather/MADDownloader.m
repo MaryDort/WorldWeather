@@ -21,8 +21,9 @@
     return _APIDownloader;
 }
 
-- (void)downloadDataWithCallBack:(void (^)(NSDictionary *results))callBack {
-    [self loadDataWithURL:@"http://api.worldweatheronline.com/premium/v1/weather.ashx?key=eb8899f2e04349c298291316160208&q=Kiev&format=json&num_of_days=7" callBack:^(NSData *data) {
+- (void)downloadDataWithLocationName:(NSString *)locationName days:(NSNumber *)days callBack:(void (^)(NSDictionary *results))callBack {
+    NSString *srtURL = [NSString stringWithFormat:@"http://api.worldweatheronline.com/premium/v1/weather.ashx?key=eb8899f2e04349c298291316160208&q=%@&format=json&num_of_days=%@", locationName, days];
+    [self loadDataWithURL:srtURL callBack:^(NSData *data) {
         //        Check for JSON error
         NSError *JSONerror;
         NSDictionary *results = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&JSONerror];

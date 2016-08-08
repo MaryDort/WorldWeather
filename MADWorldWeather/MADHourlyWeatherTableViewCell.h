@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MADDescriptionTableViewCell : UITableViewCell
+@interface MADHourlyWeatherTableViewCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UILabel *timeLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *descriptionIconImageView;
 @property (weak, nonatomic) IBOutlet UILabel *tempLabel;

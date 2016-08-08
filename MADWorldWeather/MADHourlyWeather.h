@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-@interface MADWeatherDescription : NSObject <UITableViewDataSource>
+@interface MADHourlyWeather : NSObject <UITableViewDataSource, UITableViewDelegate>
 
 - (instancetype)initWithDate:(NSDate *)date hourlyInfo:(NSArray *)hourlyInfo;
 

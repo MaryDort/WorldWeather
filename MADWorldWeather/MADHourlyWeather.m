@@ -6,14 +6,14 @@
 //  Copyright © 2016 marydort. All rights reserved.
 //
 
-#import "MADWeatherDescription.h"
-#import "MADDescriptionTableViewCell.h"
+#import "MADHourlyWeather.h"
+#import "MADHourlyWeatherTableViewCell.h"
 #import "CoreData/CoreData.h"
 #import "MADCoreDataStack.h"
 #import "MADHourly.h"
 #import "MADDownloader.h"
 
-@interface MADWeatherDescription ()
+@interface MADHourlyWeather ()
 
 @property (nonatomic, readwrite, strong) NSFetchedResultsController *fetchedResultsController;
 @property (strong, nonatomic, readwrite) NSManagedObjectContext *managedObjectContext;
@@ -22,7 +22,7 @@
 
 @end
 
-@implementation MADWeatherDescription
+@implementation MADHourlyWeather
 
 - (instancetype)initWithDate:(NSDate *)date hourlyInfo:(NSArray *)hourlyInfo {
     self = [super init];
@@ -46,12 +46,13 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    MADDescriptionTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MADDescriptionTableViewCell"];
+    MADHourlyWeatherTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MADHourlyWeatherTableViewCell"];
     MADHourly *hourly = [_hourlyInfo objectAtIndex:indexPath.row];
 
     cell.timeLabel.text = [NSString stringWithFormat:@"%@:00", hourly.time];
     cell.tempLabel.text = [NSString stringWithFormat:@"%@°", hourly.currentTempC];
-    
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+
     if (!hourly.icon) {
         [[MADDownloader sharedAPIDownloader] downloadDataWithURL:hourly.weatherIconURL callBack:^(NSData *imageData) {
             cell.descriptionIconImageView.image = [UIImage imageWithData:imageData];
@@ -61,6 +62,12 @@
     }
     
     return cell;
+}
+
+#pragma mark - Table View Delegate
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 35.f;
 }
 
 #pragma mark - Private
