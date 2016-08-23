@@ -41,9 +41,8 @@
     
     _placemark = _locations[indexPath.row];
     
-    cell.textLabel.text = _placemark.name;
-    cell.detailTextLabel.text = [self parseAddress];
-    
+    cell.textLabel.text = [NSString stringWithFormat:@"%@, %@", _placemark.addressDictionary[@"City"], _placemark.addressDictionary[@"Country"]];
+
     return cell;
 }
 
@@ -59,6 +58,7 @@
 #pragma mark - Search Results Updating
 
 - (void)updateSearchResultsForSearchController:(UISearchController *)searchController {
+    [_geocoder cancelGeocode];
     [_geocoder geocodeAddressString:searchController.searchBar.text completionHandler:^(NSArray *placemarks, NSError *error) {
         if (error) {
             NSLog(@"%@", [error description]);
@@ -68,32 +68,6 @@
             [self.tableView reloadData];
         }
     }];
-}
-
-#pragma mark - Private
-
-- (NSString *)parseAddress {
-    NSMutableArray *address = [[NSMutableArray alloc] init];
-    
-    if (_placemark.subThoroughfare) {
-        [address addObject:[NSString stringWithFormat:@"%@", _placemark.subThoroughfare]];
-    }
-    if (_placemark.thoroughfare) {
-        [address addObject:[NSString stringWithFormat:@"%@", _placemark.thoroughfare]];
-    }
-    
-    if (_placemark.locality) {
-        [address addObject:[NSString stringWithFormat:@"%@", _placemark.locality]];
-    }
-    if (![_placemark.administrativeArea isEqualToString:_placemark.locality] && _placemark.administrativeArea) {
-        [address addObject:[NSString stringWithFormat:@"%@", _placemark.administrativeArea]];
-    }
-    
-    if (address.count == 0) {
-        return @"";
-    }
-    
-    return [address componentsJoinedByString:@", "];
 }
 
 @end

@@ -2,7 +2,7 @@
 //  MADWeather+CoreDataProperties.m
 //  MADWorldWeather
 //
-//  Created by Mariia Cherniuk on 05.08.16.
+//  Created by Mariia Cherniuk on 23.08.16.
 //  Copyright © 2016 marydort. All rights reserved.
 //
 //  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
@@ -16,12 +16,13 @@
 @dynamic date;
 @dynamic maxTempC;
 @dynamic maxTempF;
-@dynamic minTempF;
 @dynamic minTempC;
+@dynamic minTempF;
 @dynamic moonrise;
 @dynamic moonset;
 @dynamic sunrise;
 @dynamic sunset;
 @dynamic hourly;
+@dynamic city;
 
 @end

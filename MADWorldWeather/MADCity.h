@@ -1,5 +1,5 @@
 //
-//  MADHourly.h
+//  MADCity.h
 //  MADWorldWeather
 //
 //  Created by Mariia Cherniuk on 23.08.16.
@@ -13,7 +13,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface MADHourly : NSManagedObject
+@interface MADCity : NSManagedObject
 
 // Insert code here to declare functionality of your managed object subclass
 
@@ -21,4 +21,4 @@ NS_ASSUME_NONNULL_BEGIN
 
 NS_ASSUME_NONNULL_END
 
-#import "MADHourly+CoreDataProperties.h"
+#import "MADCity+CoreDataProperties.h"

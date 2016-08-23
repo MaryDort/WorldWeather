@@ -54,7 +54,7 @@
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
     if (!hourly.icon) {
-        [[MADDownloader sharedAPIDownloader] downloadDataWithURL:hourly.weatherIconURL callBack:^(NSData *imageData) {
+        [[MADDownloader sharedDownloader] downloadDataWithURL:hourly.weatherIconURL callBack:^(NSData *imageData) {
             cell.descriptionIconImageView.image = [UIImage imageWithData:imageData];
         }];
     } else {

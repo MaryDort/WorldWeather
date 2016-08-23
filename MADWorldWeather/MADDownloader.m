@@ -10,7 +10,7 @@
 
 @implementation MADDownloader
 
-+ (instancetype)sharedAPIDownloader {
++ (instancetype)sharedDownloader {
     static MADDownloader *_APIDownloader = nil;
     static dispatch_once_t predicate;
     
@@ -21,8 +21,18 @@
     return _APIDownloader;
 }
 
+- (NSString *)preparePlaceForWork:(NSString *)place {
+    NSRange range = [place rangeOfString:@","];
+
+    if (range.location != NSNotFound) {
+        place = [place substringToIndex:range.location];
+    }
+    
+    return place;
+}
+
 - (void)downloadDataWithLocationName:(NSString *)locationName days:(NSNumber *)days callBack:(void (^)(NSDictionary *results))callBack {
-    NSString *srtURL = [NSString stringWithFormat:@"http://api.worldweatheronline.com/premium/v1/weather.ashx?key=eb8899f2e04349c298291316160208&q=%@&format=json&num_of_days=%@", locationName, days];
+    NSString *srtURL = [NSString stringWithFormat:@"http://api.worldweatheronline.com/premium/v1/weather.ashx?key=eb8899f2e04349c298291316160208&q=%@&format=json&num_of_days=%@", [self preparePlaceForWork:locationName], days];
     [self loadDataWithURL:srtURL callBack:^(NSData *data) {
         //        Check for JSON error
         NSError *JSONerror;
@@ -44,7 +54,9 @@
 - (void)loadDataWithURL:(NSString *)url callBack:(void (^)(NSData *results))callBack {
     NSURLSession *session = [NSURLSession sharedSession];
     NSURL *URL = [NSURL URLWithString:url];
-    NSURLSessionDataTask *dataTask = [session dataTaskWithURL:URL completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+    NSURLRequest *request = [NSURLRequest requestWithURL:URL];
+    NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:request completionHandler:^(NSData * data, NSURLResponse *response, NSError *error) {
+        
         NSInteger statusCode = [(NSHTTPURLResponse *)response statusCode];
 
         if (error) {

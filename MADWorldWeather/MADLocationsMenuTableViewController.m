@@ -9,6 +9,10 @@
 #import "MADLocationsMenuTableViewController.h"
 #import "MADLocationSearchTableViewController.h"
 #import "MADLocationsMenuTableViewCell.h"
+#import "MADCoreDataStack.h"
+#import "MADDownloader.h"
+#import "MADFetchedResults.h"
+#import "NSDate+MADDateFormatter.h"
 
 @interface MADLocationsMenuTableViewController ()
 
@@ -16,7 +20,6 @@
 @property (strong, nonatomic, readwrite) UISearchController *searchController;
 @property (strong, nonatomic, readwrite) MADLocationSearchTableViewController *searchResultsController;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *addBarButtonItem;
-
 
 @end
 
@@ -40,6 +43,22 @@
     _searchResultsController.complitionBlock = ^void(NSString *placeName) {
         MADLocationsMenuTableViewController *temp2 = temp;
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+        
+        [[MADDownloader sharedDownloader] downloadDataWithLocationName:placeName days:[NSNumber numberWithInteger:1] callBack:^(NSDictionary *results) {
+            [[MADCoreDataStack sharedCoreDataStack] saveObjects:results];
+            
+            
+            MADFetchedResults *fetchedResults = [[MADFetchedResults alloc] initWithDate:[NSDate date]];
+            
+            fetchedResults.fetchedResultsController.fetchRequest.predicate = [NSPredicate predicateWithFormat:@" & date = %@", [NSDate startOfDay]];
+            
+            
+            
+            
+            
+            
+        }];
+        
         
         [temp2.locationsArray insertObject:placeName atIndex:temp2.locationsArray.count];
         [temp2.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
@@ -66,7 +85,6 @@
 
     return cell;
 }
-
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
      return YES;

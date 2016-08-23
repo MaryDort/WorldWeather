@@ -9,6 +9,7 @@
 #import "MADCoreDataStack.h"
 #import "MADWeather.h"
 #import "MADHourly.h"
+#import "MADCity.h"
 
 @implementation MADCoreDataStack
 
@@ -84,7 +85,7 @@
         currentCondition.weatherDesc = results[@"data"][@"current_condition"][0][@"weatherDesc"][0][@"value"];
         currentCondition.currentTempC = results[@"data"][@"current_condition"][0][@"temp_C"];
         currentCondition.currentTempF = results[@"data"][@"current_condition"][0][@"temp_F"];
-        currentCondition.windSpeedMiles = results[@"data"][@"current_condition"][0][@"windspeedMiles"];
+        currentCondition.windSpeed = [NSString stringWithFormat:@"%@ at %@ km/h",  results[@"data"][@"current_condition"][0][@"winddir16Point"], results[@"data"][@"current_condition"][0][@"windspeedKmph"]];
         currentCondition.pressure = results[@"data"][@"current_condition"][0][@"pressure"];
         currentCondition.weatherIconURL = results[@"data"][@"current_condition"][0][@"weatherIconUrl"][0][@"value"];
         currentCondition.humidity = results[@"data"][@"current_condition"][0][@"humidity"];
@@ -95,6 +96,11 @@
     
     NSArray *workingDates = [self castingDate:[results[@"data"][@"weather"] valueForKeyPath:@"date"]];
     NSArray *uniqueWeather = [self uniquenessWeatherCheck:[self prepareArrayForWork:results[@"data"][@"weather"] substitutionalResource:workingDates]];
+    
+    MADCity *city = (MADCity*)[NSEntityDescription insertNewObjectForEntityForName:@"MADCity" inManagedObjectContext:self.managedObjectContext];
+    NSMutableSet *weatherSet = [[NSMutableSet alloc] init];
+    
+    city.name = results[@"data"][@"request"][0][@"query"];
     
     for (NSDictionary *data in uniqueWeather) {
         MADWeather *weather = (MADWeather *)[NSEntityDescription insertNewObjectForEntityForName:@"MADWeather" inManagedObjectContext:self.managedObjectContext];
@@ -117,7 +123,7 @@
             hourly.weatherDesc = hourlyData[@"weatherDesc"][0][@"value"];
             hourly.currentTempC = hourlyData[@"tempC"];
             hourly.currentTempF = hourlyData[@"tempF"];
-            hourly.windSpeedMiles = hourlyData[@"windspeedMiles"];
+            hourly.windSpeed = [NSString stringWithFormat:@"%@ at %@ km/h", hourlyData[@"winddir16Point"], hourlyData[@"windspeedKmph"]];
             hourly.pressure = hourlyData[@"pressure"];
             hourly.weatherIconURL = hourlyData[@"weatherIconUrl"][0][@"value"];
             hourly.humidity = hourlyData[@"humidity"];
@@ -127,7 +133,9 @@
             [hourlySet addObject:hourly];
         }
         [weather addHourly:hourlySet];
+        [weatherSet addObject:weather];
     }
+    [city addWeather:weatherSet];
     [self saveToStorage];
 }
 

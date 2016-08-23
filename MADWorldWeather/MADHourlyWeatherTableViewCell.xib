@@ -53,6 +53,7 @@
                     <constraint firstItem="aXk-1I-ylp" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="-8" id="z4l-Ke-kJj"/>
                 </constraints>
             </tableViewCellContentView>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <connections>
                 <outlet property="DescriptionIconImageView" destination="yLB-1s-ig8" id="UXW-Hu-XAy"/>
                 <outlet property="TimeLabel" destination="aXk-1I-ylp" id="NsQ-XX-ZHU"/>

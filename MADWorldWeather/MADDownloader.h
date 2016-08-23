@@ -10,7 +10,7 @@
 
 @interface MADDownloader : NSObject
 
-+ (instancetype)sharedAPIDownloader;
++ (instancetype)sharedDownloader;
 
 - (void)downloadDataWithLocationName:(NSString *)locationName days:(NSNumber *)days callBack:(void (^)(NSDictionary *results))callBack;
 - (void)downloadDataWithURL:(NSString *)url callBack:(void (^)(NSData *imageData))callBack;

@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface MADLocationsMenuTableViewCell : UITableViewCell
-@property (weak, nonatomic) IBOutlet UILabel *currentTimeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *currentLocationNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *currentTempLabel;
 
