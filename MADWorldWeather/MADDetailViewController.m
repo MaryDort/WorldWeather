@@ -1,12 +1,12 @@
 //
-//  ViewController.m
+//  MADDetailViewController.m
 //  MADWorldWeather
 //
 //  Created by Mariia Cherniuk on 02.08.16.
 //  Copyright © 2016 marydort. All rights reserved.
 //
 
-#import "ViewController.h"
+#import "MADDetailViewController.h"
 #import "MADDownloader.h"
 #import "MADCoreDataStack.h"
 #import "CoreData/CoreData.h"
@@ -16,7 +16,9 @@
 #import "MADHourly.h"
 #import "NSDate+MADDateFormatter.h"
 
-@interface ViewController ()
+@interface MADDetailViewController ()
+
+@property (weak, nonatomic) IBOutlet UILabel *weatherDesc;
 @property (weak, nonatomic) IBOutlet UIImageView *currentWeatherImageView;
 @property (weak, nonatomic) IBOutlet UIImageView *moonriseImageView;
 @property (weak, nonatomic) IBOutlet UIImageView *moonsetImageView;
@@ -41,39 +43,38 @@
 @property (weak, nonatomic) IBOutlet UIVisualEffectView *fondVisualEffectView;
 @property (weak, nonatomic) IBOutlet UIVisualEffectView *tabelVisualEffectView;
 
-
 @property (nonatomic, readwrite, strong) NSFetchedResultsController *fetchedResultsController;
 @property (strong, nonatomic, readwrite) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, readwrite, strong) MADHourlyWeather *hourlyWeather;
 @property (nonatomic, readwrite, strong) MADForecastWeather *forecastWeather;
 @property (nonatomic, readwrite, strong) NSDate *currentDate;
 @property (nonatomic, readwrite, strong) MADWeather *currentWeather;
-@property (nonatomic, readwrite, strong) MADHourly *observationWeather;
+@property (nonatomic, readwrite, strong) MADHourly *observationHourly;
 
 @end
 
-@implementation ViewController
+@implementation MADDetailViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.navigationItem.title = _city.name;
     
     _currentDate = [NSDate formattedDate];
     
     [_hourlyWeatherTabelView registerNib:[UINib nibWithNibName:@"MADHourlyWeatherTableViewCell" bundle:nil] forCellReuseIdentifier:@"MADHourlyWeatherTableViewCell"];
     [_forecastWeatherTabelView registerNib:[UINib nibWithNibName:@"MADForecastWeatherTableViewCell" bundle:nil] forCellReuseIdentifier:@"MADForecastWeatherTableViewCell"];
     
-    [[MADDownloader sharedDownloader] downloadDataWithLocationName:@"Kiev" days:[NSNumber numberWithInteger:7] callBack:^(NSDictionary *results) {
-        [[MADCoreDataStack sharedCoreDataStack] saveObjects:results];
-        [self configureObservationWeatherViews];
-        [self configureHourlyWeatherTabelView];
-        [self configureForecastWeatherTabelView];
-    }];
+    [self configureObservationWeatherViews];
+    [self configureHourlyWeatherTabelView];
+//    [self configureForecastWeatherTabelView];
 }
 
 - (void)configureObservationWeatherViews {
     _fondVisualEffectView.layer.cornerRadius = 10.f;
     _fondVisualEffectView.layer.masksToBounds = YES;
-    _currentWeather = [self.fetchedResultsController objectAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+
+//    NSPredicate *weatherPredicate = [NSPredicate predicateWithFormat:@"date = %@", [NSDate formattedDate]];
+    _currentWeather = [_city.weather.allObjects sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"date" ascending:NO]]].firstObject;
     
     _maxTempLabel.text = [NSString stringWithFormat:@"max - %@°", _currentWeather.maxTempC];
     _minTempLabel.text = [NSString stringWithFormat:@"min - %@°", _currentWeather.minTempC];
@@ -82,30 +83,40 @@
     _sunriseLabel.text = _currentWeather.sunrise;
     _sunsetLabel.text = _currentWeather.sunset;
     
-    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"MADHourly" inManagedObjectContext:_managedObjectContext];
-    self.fetchedResultsController.fetchRequest.entity = entityDescription;
-    self.fetchedResultsController.fetchRequest.predicate = [NSPredicate predicateWithFormat:@"observationTime != %@", nil];
+    _observationHourly = _city.currentHourlyWeather;
     
-    NSError *error = nil;
-    if (![self.fetchedResultsController performFetch:&error]) {
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-    }
+    NSLog(@"%@", _observationHourly.weatherDesc);
     
-    _observationWeather = [self.fetchedResultsController objectAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
     
-    if ([_observationWeather.weatherDesc isEqualToString:@"Sunny"]) {
+    if ([_observationHourly.weatherDesc containsString:@"Sunny"]) {
         _currentWeatherImageView.image = [UIImage imageNamed:@"sunny"];
         _currentWeatherIcon.image = [UIImage imageNamed:@"sun"];
-    } else if ([_observationWeather.weatherDesc isEqualToString:@"Rainy"]) {
-        _currentWeatherImageView.image = [UIImage imageNamed:@"rainy"];
+    } else if ([_observationHourly.weatherDesc containsString:@"Partly Cloudy"]) {
+        _currentWeatherImageView.image = [UIImage imageNamed:@"part"];
+        _currentWeatherIcon.image = [UIImage imageNamed:@"partly"];
+    } else if ([_observationHourly.weatherDesc containsString:@"Overcast"]) {
+        _currentWeatherImageView.image = [UIImage imageNamed:@"over"];
+        _currentWeatherIcon.image = [UIImage imageNamed:@"overcast"];
+    } else if ([_observationHourly.weatherDesc containsString:@"Clear"]) {
+        _currentWeatherImageView.image = [UIImage imageNamed:@"clear"];
+        _currentWeatherIcon.image = [UIImage imageNamed:@"sun"];
+    } else if ([_observationHourly.weatherDesc containsString:@"Light Rain"]) {
+        _currentWeatherImageView.image = [UIImage imageNamed:@"lightRain"];
         _currentWeatherIcon.image = [UIImage imageNamed:@"rain"];
+    } else if ([_observationHourly.weatherDesc containsString:@"Moderate rain"]) {
+        _currentWeatherImageView.image = [UIImage imageNamed:@"moderateRain"];
+        _currentWeatherIcon.image = [UIImage imageNamed:@"rain"];
+    } else if ([_observationHourly.weatherDesc containsString:@"Fog"] || [_observationHourly.weatherDesc containsString:@"Haze"]) {
+        _currentWeatherImageView.image = [UIImage imageNamed:@"fog"];
+        _currentWeatherIcon.image = [UIImage imageNamed:@"fogIcon"];
     }
+
     
-    _currentWeatherTemp.text = [NSString stringWithFormat:@"%@°", _observationWeather.currentTempC];
-    _humidityValueLabel.text = [NSString stringWithFormat:@"Humidity %@ %%", _observationWeather.humidity];
-    _pressureValueLabel.text = [NSString stringWithFormat:@"Pressure %@ hPa", _observationWeather.pressure];
-    _windValueLabel.text = [NSString stringWithFormat:@"%@", _observationWeather.windSpeed];
-    _weatherDescription.text = _observationWeather.weatherDesc;
+    _currentWeatherTemp.text = [NSString stringWithFormat:@"%@°", _observationHourly.currentTempC];
+    _humidityValueLabel.text = [NSString stringWithFormat:@"Humidity %@ %%", _observationHourly.humidity];
+    _pressureValueLabel.text = [NSString stringWithFormat:@"Pressure %@ hPa", _observationHourly.pressure];
+    _windValueLabel.text = [NSString stringWithFormat:@"%@", _observationHourly.windSpeed];
+    _weatherDescription.text = _observationHourly.weatherDesc;
 }
 
 - (void)configureHourlyWeatherTabelView {
@@ -134,40 +145,11 @@
     }
     
     _forecastWeather = [[MADForecastWeather alloc] initWithForecastInfo:self.fetchedResultsController.fetchedObjects];
+    
     _forecastWeatherTabelView.dataSource = _forecastWeather;
     _forecastWeatherTabelView.delegate = _forecastWeather;
     _forecastWeatherTabelView.layer.cornerRadius = 10.f;
     [_forecastWeatherTabelView reloadData];
-}
-
-- (NSFetchedResultsController *)fetchedResultsController {
-    if (_fetchedResultsController) {
-        return _fetchedResultsController;
-    }
-    
-    _managedObjectContext = [[MADCoreDataStack sharedCoreDataStack] managedObjectContext];
-    NSFetchRequest *request = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"MADWeather"
-                                              inManagedObjectContext:_managedObjectContext];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"date = %@", _currentDate];
-    request.entity = entity;
-    request.fetchBatchSize = 1;
-    request.predicate = predicate;
-    request.sortDescriptors = @[];
-    
-    NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc]
-                                                             initWithFetchRequest:request
-                                                             managedObjectContext:_managedObjectContext
-                                                             sectionNameKeyPath:nil
-                                                             cacheName:nil];
-    _fetchedResultsController = aFetchedResultsController;
-    
-    NSError *error = nil;
-    if (![_fetchedResultsController performFetch:&error]) {
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-    }
-    
-    return _fetchedResultsController;
 }
 
 - (NSArray *)prepareHourlyForWork:(NSArray *)objects {

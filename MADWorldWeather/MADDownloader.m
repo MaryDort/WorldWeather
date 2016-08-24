@@ -28,7 +28,15 @@
         place = [place substringToIndex:range.location];
     }
     
-    return place;
+    NSMutableString *result = [NSMutableString stringWithString:place];
+    if ([place containsString:@" "]) {
+        NSRange range = [place rangeOfString:@" "];
+        
+        result = [NSMutableString stringWithString:[place substringToIndex:range.location]];
+        [result appendString:[place substringFromIndex:range.location+1]];
+    }
+    
+    return result;
 }
 
 - (void)downloadDataWithLocationName:(NSString *)locationName days:(NSNumber *)days callBack:(void (^)(NSDictionary *results))callBack {
@@ -36,7 +44,9 @@
     [self loadDataWithURL:srtURL callBack:^(NSData *data) {
         //        Check for JSON error
         NSError *JSONerror;
-        NSDictionary *results = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&JSONerror];
+        NSDictionary *results = [NSJSONSerialization JSONObjectWithData:data
+                                                                options:NSJSONReadingMutableContainers
+                                                                  error:&JSONerror];
         
         if (JSONerror) {
             NSLog(@"Error: Couldn't parse response: %@", JSONerror);
@@ -65,6 +75,9 @@
         } else if (statusCode < 200 || statusCode >= 300) {
             //        Check for HTTP error
             NSLog(@"Error: Got stutus code %ld", (long)statusCode);
+        } else if (data == nil) {
+            //        Check for data == nil error
+            NSLog(@"Error: Data is nil");
         }
         
         dispatch_async(dispatch_get_main_queue(), ^{

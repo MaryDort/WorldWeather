@@ -2,6 +2,7 @@
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="10174" systemVersion="15G31" minimumToolsVersion="Xcode 7.0">
     <entity name="MADCity" representedClassName="MADCity" syncable="YES">
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="currentHourlyWeather" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MADHourly" inverseName="city" inverseEntity="MADHourly" syncable="YES"/>
         <relationship name="weather" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="MADWeather" inverseName="city" inverseEntity="MADWeather" syncable="YES"/>
     </entity>
     <entity name="MADHourly" representedClassName="MADHourly" syncable="YES">
@@ -18,6 +19,7 @@
         <attribute name="weatherDesc" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="weatherIconURL" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="windSpeed" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="city" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MADCity" inverseName="currentHourlyWeather" inverseEntity="MADCity" syncable="YES"/>
         <relationship name="weather" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MADWeather" inverseName="hourly" inverseEntity="MADWeather" syncable="YES"/>
     </entity>
     <entity name="MADWeather" representedClassName="MADWeather" syncable="YES">
@@ -34,8 +36,8 @@
         <relationship name="hourly" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="MADHourly" inverseName="weather" inverseEntity="MADHourly" syncable="YES"/>
     </entity>
     <elements>
-        <element name="MADHourly" positionX="180" positionY="-15" width="128" height="253"/>
+        <element name="MADHourly" positionX="180" positionY="-15" width="128" height="268"/>
         <element name="MADWeather" positionX="-63" positionY="-18" width="128" height="208"/>
-        <element name="MADCity" positionX="-288" positionY="180" width="128" height="73"/>
+        <element name="MADCity" positionX="-288" positionY="180" width="128" height="88"/>
     </elements>
 </model>

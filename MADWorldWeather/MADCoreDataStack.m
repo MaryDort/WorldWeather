@@ -10,6 +10,13 @@
 #import "MADWeather.h"
 #import "MADHourly.h"
 #import "MADCity.h"
+#import "NSDate+MADDateFormatter.h"
+
+@interface MADCoreDataStack()
+
+@property (strong, nonatomic) NSDateFormatter *dateFormatter;
+
+@end
 
 @implementation MADCoreDataStack
 
@@ -22,6 +29,17 @@
     });
     
     return coreDataStack;
+}
+
+- (instancetype)init {
+    self = [super init];
+    
+    if (self) {
+        _dateFormatter = [[NSDateFormatter alloc] init];
+        _dateFormatter.dateFormat = @"yyyy-MM-dd";
+    }
+    
+    return self;
 }
 
 #pragma mark - get CoreDataStack
@@ -44,6 +62,9 @@
     
     _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:self.managedObjectModel];
     NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"WorldWeather.sqlite"];
+    
+    
+    NSLog(@" storeURL = %@", storeURL);
     NSError *error;
 
     if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType
@@ -76,12 +97,13 @@
 }
 
 - (void)saveObjects:(NSDictionary *)results {
-    BOOL uniqueCurrentCondition = [self uniquenessCurrentConditionCheck:results[@"data"][@"current_condition"][0][@"observation_time"]];
+    BOOL uniqueCurrentCondition = [self uniquenessCurrentConditionCheck:results[@"data"][@"current_condition"][0][@"observation_time"] cityName:results[@"data"][@"request"][0][@"query"]];
+    MADHourly *currentCondition = nil;
     
     if (!uniqueCurrentCondition) {
-        MADHourly *currentCondition = (MADHourly *)[NSEntityDescription insertNewObjectForEntityForName:@"MADHourly" inManagedObjectContext:self.managedObjectContext];
+        currentCondition = (MADHourly *)[NSEntityDescription insertNewObjectForEntityForName:@"MADHourly" inManagedObjectContext:self.managedObjectContext];
         
-        currentCondition.date = [[NSCalendar currentCalendar] startOfDayForDate:[NSDate date]];
+        currentCondition.date = [NSDate startOfDay];
         currentCondition.weatherDesc = results[@"data"][@"current_condition"][0][@"weatherDesc"][0][@"value"];
         currentCondition.currentTempC = results[@"data"][@"current_condition"][0][@"temp_C"];
         currentCondition.currentTempF = results[@"data"][@"current_condition"][0][@"temp_F"];
@@ -94,13 +116,17 @@
         currentCondition.observationTime = results[@"data"][@"current_condition"][0][@"observation_time"];
     }
     
-    NSArray *workingDates = [self castingDate:[results[@"data"][@"weather"] valueForKeyPath:@"date"]];
-    NSArray *uniqueWeather = [self uniquenessWeatherCheck:[self prepareArrayForWork:results[@"data"][@"weather"] substitutionalResource:workingDates]];
-    
     MADCity *city = (MADCity*)[NSEntityDescription insertNewObjectForEntityForName:@"MADCity" inManagedObjectContext:self.managedObjectContext];
-    NSMutableSet *weatherSet = [[NSMutableSet alloc] init];
     
     city.name = results[@"data"][@"request"][0][@"query"];
+    if (currentCondition != nil) {
+        city.currentHourlyWeather = currentCondition;
+    }
+    [self removeOutdatedWeatherByCity:city];
+    
+    NSArray *workingDates = [self custDate:[results[@"data"][@"weather"] valueForKeyPath:@"date"]];
+    NSArray *uniqueWeather = [self uniquenessWeatherCheck:[self prepareArrayForWork:results[@"data"][@"weather"] substitutionalResource:workingDates] city:city];
+    NSMutableSet *weatherSet = [[NSMutableSet alloc] init];
     
     for (NSDictionary *data in uniqueWeather) {
         MADWeather *weather = (MADWeather *)[NSEntityDescription insertNewObjectForEntityForName:@"MADWeather" inManagedObjectContext:self.managedObjectContext];
@@ -139,15 +165,11 @@
     [self saveToStorage];
 }
 
-- (NSArray *)castingDate:(NSArray *)datesString {
-//    casting NSString date to NSDate
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+- (NSArray *)custDate:(NSArray *)datesString {
     NSMutableArray *newDates = [[NSMutableArray alloc] init];
     
-    [dateFormatter setDateFormat:@"yyyy-MM-dd"];
-    
     for (NSString *date in datesString) {
-        [newDates addObject:[dateFormatter dateFromString:date]];
+        [newDates addObject:[_dateFormatter dateFromString:date]];
     }
     
     return newDates;
@@ -155,6 +177,7 @@
 
 - (NSArray *)prepareArrayForWork:(NSArray *)source
           substitutionalResource:(NSArray *)substitutionalResource {
+//    NSString  date замінити NSDate date
     for (NSInteger i = 0; i < source.count; i++) {
         [source[i] setValue:substitutionalResource[i] forKeyPath:@"date"];
     }
@@ -162,36 +185,30 @@
     return source;
 }
 
-- (BOOL)uniquenessCurrentConditionCheck:(NSString *)currentConditionTime {
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"observationTime == %@ && date = %@", currentConditionTime, [[NSCalendar currentCalendar] startOfDayForDate:[NSDate date]]];
-    NSArray *response = [[self fetchingDistinctValueByPredicate:predicate entityName:@"MADHourly"] valueForKeyPath:@"observationTime"];
+- (BOOL)uniquenessCurrentConditionCheck:(NSString *)currentConditionTime cityName:(NSString *)cityName {
+//        перевірити чи є місто в базі
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name == %@", cityName];
+    MADCity *city = [self fetchingDistinctValueByPredicate:predicate entityName:@"MADCity"].firstObject;
     
-//        перевірити чи є в базі
-    if (response.count == 0) {
-//        немає, перевірити чи є попередій
-        NSPredicate *predicate2 = [NSPredicate predicateWithFormat:@"observationTime != %@", nil];
-        NSArray *response2 = [[self fetchingDistinctValueByPredicate:predicate2 entityName:@"MADHourly"] valueForKeyPath:@"observationTime"];
-
-        if (response2.count != 0) {
-//        є, видалити попередній з бази
-            [self.managedObjectContext deleteObject:response2.firstObject];
-        }
+    if (city == nil) {
+//        немає, зберігаємо
         return NO;
-    } else {
+    } else if ([city.currentHourlyWeather.observationTime isEqualToString:currentConditionTime]) {
+//        є, перевіряємо чи observationTime == currentConditionTime, якщо так - НЕзберігаємо
         return YES;
+    } else {
+//        ні - зберігаємо
+        return NO;
     }
 }
 
-- (NSArray *)uniquenessWeatherCheck:(NSArray *)weathers {
-    NSArray *weatherDates = [weathers valueForKeyPath:@"date"];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"date IN %@", weatherDates];
-    NSArray *response = [[self fetchingDistinctValueByPredicate:predicate entityName:@"MADWeather"] valueForKeyPath:@"date"];
-    NSPredicate *filterPredicate = [NSPredicate predicateWithBlock:
-                                    ^BOOL(NSDictionary *evaluatedObject, NSDictionary *bindings) {
-                                        return ![response containsObject:evaluatedObject[@"date"]];
-                                    }];
-    
-    return [weathers filteredArrayUsingPredicate:filterPredicate];
+- (NSArray *)uniquenessWeatherCheck:(NSArray *)weathers city:(MADCity *)city {
+    NSArray *oldWeahtersDates = [city.weather valueForKeyPath:@"date"];
+    NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(NSDictionary *evaluatedObject, NSDictionary<NSString *,id> * _Nullable bindings) {
+        NSDate *date = evaluatedObject[@"date"];
+        return ![oldWeahtersDates containsObject:date];
+    }];
+    return [weathers filteredArrayUsingPredicate:predicate];
 }
 
 - (NSArray *)fetchingDistinctValueByPredicate:(NSPredicate *)predicate
@@ -219,6 +236,17 @@
     if (![self.managedObjectContext save:&error]) {
         NSLog(@"%@", [error description]);
     }
+}
+
+- (void)removeOutdatedWeatherByCity:(MADCity *)city {
+    NSDate *currentDate = [NSDate formattedDate];
+    
+    for (MADWeather *weather in city.weather) {
+        if ([weather.date compare:currentDate] == NSOrderedAscending) {
+            [self.managedObjectContext deleteObject:weather];
+        }
+    }
+    [self saveToStorage];
 }
 
 @end

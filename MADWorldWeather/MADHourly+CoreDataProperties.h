@@ -29,6 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSString *weatherIconURL;
 @property (nullable, nonatomic, retain) NSString *windSpeed;
 @property (nullable, nonatomic, retain) MADWeather *weather;
+@property (nullable, nonatomic, retain) MADCity *city;
 
 @end
 

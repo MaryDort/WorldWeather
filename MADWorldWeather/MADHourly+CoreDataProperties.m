@@ -27,5 +27,6 @@
 @dynamic weatherIconURL;
 @dynamic windSpeed;
 @dynamic weather;
+@dynamic city;
 
 @end

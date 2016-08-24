@@ -7,6 +7,7 @@
 //
 
 #import "MADCity.h"
+#import "MADHourly.h"
 #import "MADWeather.h"
 
 @implementation MADCity

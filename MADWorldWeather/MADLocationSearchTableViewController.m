@@ -41,6 +41,9 @@
     
     _placemark = _locations[indexPath.row];
     
+    if (_placemark.addressDictionary[@"City"] == nil) {
+        return cell;
+    }
     cell.textLabel.text = [NSString stringWithFormat:@"%@, %@", _placemark.addressDictionary[@"City"], _placemark.addressDictionary[@"Country"]];
 
     return cell;
@@ -50,7 +53,9 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     dispatch_async(dispatch_get_main_queue(), ^{
-         _complitionBlock([[_locations objectAtIndex:indexPath.row] name]);
+        NSString *placeName = [NSString stringWithFormat:@"%@, %@", [_locations[indexPath.row] addressDictionary][@"City"], [_locations[indexPath.row] addressDictionary][@"Country"]];
+        
+        _complitionBlock(placeName);
     });
     [self dismissViewControllerAnimated:YES completion:nil];
 }

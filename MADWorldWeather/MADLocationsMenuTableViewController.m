@@ -13,12 +13,16 @@
 #import "MADDownloader.h"
 #import "MADFetchedResults.h"
 #import "NSDate+MADDateFormatter.h"
+#import "MADDetailViewController.h"
+#import "MADCity.h"
+#import "MADHourly.h"
 
-@interface MADLocationsMenuTableViewController ()
+@interface MADLocationsMenuTableViewController () <NSFetchedResultsControllerDelegate>
 
 @property (strong, nonatomic, readwrite) NSMutableArray *locationsArray;
 @property (strong, nonatomic, readwrite) UISearchController *searchController;
 @property (strong, nonatomic, readwrite) MADLocationSearchTableViewController *searchResultsController;
+@property (strong, nonatomic, readwrite) __block MADFetchedResults *fetchedResults;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *addBarButtonItem;
 
 @end
@@ -29,6 +33,8 @@
     [super viewDidLoad];
     
     _locationsArray = [[NSMutableArray alloc] init];
+    _fetchedResults = [[MADFetchedResults alloc] initWithDate:[NSDate date]];
+    _fetchedResults.fetchedResultsController.delegate = self;
     
     [self.tableView registerNib:[UINib nibWithNibName:@"MADLocationsMenuTableViewCell" bundle:nil] forCellReuseIdentifier:@"MADLocationsMenuTableViewCell"];
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"cell"];
@@ -38,31 +44,10 @@
     _searchResultsController = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"MADLocationSearchTableViewController"];
     _searchController = [[UISearchController alloc] initWithSearchResultsController:_searchResultsController];
     _searchController.searchResultsUpdater = _searchResultsController;
-    
-    __weak MADLocationsMenuTableViewController *temp = self;
     _searchResultsController.complitionBlock = ^void(NSString *placeName) {
-        MADLocationsMenuTableViewController *temp2 = temp;
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-        
         [[MADDownloader sharedDownloader] downloadDataWithLocationName:placeName days:[NSNumber numberWithInteger:1] callBack:^(NSDictionary *results) {
             [[MADCoreDataStack sharedCoreDataStack] saveObjects:results];
-            
-            
-            MADFetchedResults *fetchedResults = [[MADFetchedResults alloc] initWithDate:[NSDate date]];
-            
-            fetchedResults.fetchedResultsController.fetchRequest.predicate = [NSPredicate predicateWithFormat:@" & date = %@", [NSDate startOfDay]];
-            
-            
-            
-            
-            
-            
         }];
-        
-        
-        [temp2.locationsArray insertObject:placeName atIndex:temp2.locationsArray.count];
-        [temp2.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-        [temp2.tableView reloadData];
     };
     
     [self presentViewController:_searchController animated:YES completion:nil];
@@ -71,17 +56,21 @@
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+    return _fetchedResults.fetchedResultsController.sections.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return _locationsArray.count;
+    id <NSFetchedResultsSectionInfo> sectionInfo = _fetchedResults.fetchedResultsController.sections[section];
+    
+    return sectionInfo.numberOfObjects;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     MADLocationsMenuTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MADLocationsMenuTableViewCell"];
+    MADCity *city = [_fetchedResults.fetchedResultsController objectAtIndexPath:indexPath];
     
-    cell.currentLocationNameLabel.text = [_locationsArray objectAtIndex:indexPath.row];
+    cell.currentLocationNameLabel.text = city.name;
+    cell.currentTempLabel.text = [NSString stringWithFormat:@"%@°", city.currentHourlyWeather.currentTempC];
 
     return cell;
 }
@@ -92,12 +81,81 @@
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        [_locationsArray removeObjectAtIndex:indexPath.row];
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        [_fetchedResults.fetchedResultsController.managedObjectContext deleteObject:[_fetchedResults.fetchedResultsController objectAtIndexPath:indexPath]];
+        
+        [[MADCoreDataStack sharedCoreDataStack] saveToStorage];
     }
 }
 
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
+#pragma mark - Table View Delegate
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    MADCity *city = [_fetchedResults.fetchedResultsController objectAtIndexPath:indexPath];
+    MADDetailViewController *detailViewController = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"MADDetailViewController"];
+    
+    detailViewController.city = city;
+    
+    [self.navigationController pushViewController:detailViewController animated:YES];
+}
+
+#pragma mark - Fetched Results Controller Delegate
+- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
+    // The fetch controller is about to start sending change notifications, so prepare the table view for updates.
+    [self.tableView beginUpdates];
+}
+
+- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {
+    
+    UITableView *tableView = self.tableView;
+    
+    switch(type) {
+            
+        case NSFetchedResultsChangeInsert:
+            [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+            
+        case NSFetchedResultsChangeDelete:
+            [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+            
+        case NSFetchedResultsChangeUpdate:
+            [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+            
+        case NSFetchedResultsChangeMove:
+            [self.tableView deleteRowsAtIndexPaths:[NSArray
+                                                    arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+            [tableView insertRowsAtIndexPaths:[NSArray
+                                               arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+    }
+}
+
+- (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id)sectionInfo atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type {
+    
+    switch(type) {
+            
+        case NSFetchedResultsChangeInsert:
+            [self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+            
+        case NSFetchedResultsChangeDelete:
+            [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+            
+        case NSFetchedResultsChangeMove:
+            NSLog(@"A table item was moved");
+            break;
+            
+        case NSFetchedResultsChangeUpdate:
+            NSLog(@"A table item was updated");
+            break;
+    }
+}
+
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
+    // The fetch controller has sent all current change notifications, so tell the table view to process all updates.
+    [self.tableView endUpdates];
 }
 
 @end

@@ -17,6 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nullable, nonatomic, retain) NSString *name;
 @property (nullable, nonatomic, retain) NSSet<MADWeather *> *weather;
+@property (nullable, nonatomic, retain) MADHourly *currentHourlyWeather;
 
 @end
 

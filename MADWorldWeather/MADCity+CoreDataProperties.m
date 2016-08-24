@@ -15,5 +15,6 @@
 
 @dynamic name;
 @dynamic weather;
+@dynamic currentHourlyWeather;
 
 @end
