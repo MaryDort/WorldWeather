@@ -119,7 +119,7 @@
     MADWeatherParser *weatherParcer = [[MADWeatherParser alloc] initWithManagedObjectContext:self.managedObjectContext];
     
 //       1. то й ж день
-    if ([city.currentHourlyWeather.date isEqual:[NSDate startOfDay]]) {
+    if ([city.currentHourlyWeather.date isEqual:[NSDate startCurrentDay]]) {
         //        той ж день, перевіряємо чи observationTime != currentConditionTime, якщо не дорівнює - зберігаємо(видаляємо попередній), дорівнює - нічого не робимо
         if (![city.currentHourlyWeather.observationTime isEqualToString:currentConditionTime]) {
             [self.managedObjectContext deleteObject:city.currentHourlyWeather];

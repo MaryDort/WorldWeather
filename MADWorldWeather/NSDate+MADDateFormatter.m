@@ -11,15 +11,15 @@
 @implementation NSDate (MADDateFormatter)
 
 + (NSDate *)formattedDate {
-    NSDate *startOfDay = [self startOfDay];
+    NSDate *startCurrentDay = [self startCurrentDay];
     NSDateFormatter * formatter = [NSDateFormatter new];
     
     [formatter setDateFormat:@"yyyy-MM-dd"];
     
-    return [formatter dateFromString:[formatter stringFromDate:startOfDay]];
+    return [formatter dateFromString:[formatter stringFromDate:startCurrentDay]];
 }
 
-+ (NSDate *)startOfDay {
++ (NSDate *)startCurrentDay {
     return [[NSCalendar currentCalendar] startOfDayForDate:[NSDate date]];
 }
 

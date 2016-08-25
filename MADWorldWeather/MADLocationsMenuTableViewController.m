@@ -16,6 +16,7 @@
 #import "MADDetailViewController.h"
 #import "MADCity.h"
 #import "MADHourly.h"
+#import "UIViewController+MADAlert.h"
 
 @interface MADLocationsMenuTableViewController () <NSFetchedResultsControllerDelegate>
 
@@ -25,7 +26,6 @@
 @property (strong, nonatomic, readwrite) __block MADFetchedResults *fetchedResults;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *addBarButtonItem;
 @property (strong, nonatomic) IBOutlet UIView *backgraundView;
-
 
 @end
 
@@ -49,6 +49,8 @@
     self.refreshControl = [[UIRefreshControl alloc] init];
     self.refreshControl.backgroundColor = [UIColor blackColor];
     self.refreshControl.tintColor = [UIColor whiteColor];
+    self.refreshControl.layer.zPosition = 1.f;
+    
     [self.refreshControl addTarget:self
                             action:@selector(refreshControlRequest)
                   forControlEvents:UIControlEventValueChanged];
@@ -56,10 +58,17 @@
 
 - (void)refreshControlRequest {
     NSArray *cities = [_fetchedResults.fetchedResultsController.fetchedObjects valueForKeyPath:@"name"];
+    __weak MADLocationsMenuTableViewController *weakSelf = self;
     
     for (NSString *city in cities) {
         [[MADDownloader sharedDownloader] downloadDataWithLocationName:city days:[NSNumber numberWithInteger:1] callBack:^(NSDictionary *results) {
-            [[MADCoreDataStack sharedCoreDataStack] updateObjects:results];
+            MADLocationsMenuTableViewController *strongSelf = weakSelf;
+            
+            if (results[@"data"][@"error"] == nil) {
+                [[MADCoreDataStack sharedCoreDataStack] updateObjects:results];
+            } else {
+                [strongSelf showFailedAlertWithMessage:@"Server error"];
+            }
             [self.refreshControl endRefreshing];
         }];
     }
@@ -69,17 +78,15 @@
     _searchResultsController = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"MADLocationSearchTableViewController"];
     _searchController = [[UISearchController alloc] initWithSearchResultsController:_searchResultsController];
     _searchController.searchResultsUpdater = _searchResultsController;
-    __weak MADLocationsMenuTableViewController *tempVC = self;
+    __weak MADLocationsMenuTableViewController *weakSelf = self;
     _searchResultsController.complitionBlock = ^void(NSString *placeName) {
         [[MADDownloader sharedDownloader] downloadDataWithLocationName:placeName days:[NSNumber numberWithInteger:1] callBack:^(NSDictionary *results) {
-            if ([results[@"data"][@"error"] count] == 0) {
-                [[MADCoreDataStack sharedCoreDataStack] saveObjects:results];
+            MADLocationsMenuTableViewController *strongSelf = weakSelf;
+            
+            if (results == nil || results[@"data"][@"error"] != nil){
+                [strongSelf showFailedAlertWithMessage:@"Unable to find city"];
             } else {
-                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Failed" message:@"Unable to find city" preferredStyle:UIAlertControllerStyleAlert];
-                UIAlertAction *action = [UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleCancel handler:nil];
-                
-                [alertController addAction:action];
-                [tempVC presentViewController:alertController animated:YES completion:nil];
+                [[MADCoreDataStack sharedCoreDataStack] saveObjects:results];
             }
         }];
     };

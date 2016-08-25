@@ -11,6 +11,6 @@
 @interface NSDate (MADDateFormatter)
 
 + (NSDate *)formattedDate;
-+ (NSDate *)startOfDay;
++ (NSDate *)startCurrentDay;
 
 @end

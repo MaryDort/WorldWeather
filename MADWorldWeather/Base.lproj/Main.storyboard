@@ -317,7 +317,7 @@
             </objects>
             <point key="canvasLocation" x="1135" y="339"/>
         </scene>
-        <!--Locations Menu Table View Controller-->
+        <!--WORLD WEATHER ONLINE-->
         <scene sceneID="fFO-EC-l30">
             <objects>
                 <tableViewController id="d4p-OE-Jey" customClass="MADLocationsMenuTableViewController" sceneMemberID="viewController">
@@ -350,7 +350,7 @@
                             <outlet property="delegate" destination="d4p-OE-Jey" id="biD-RS-VRM"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="b1m-fm-eVJ">
+                    <navigationItem key="navigationItem" title="WORLD WEATHER ONLINE" id="b1m-fm-eVJ">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="h4T-40-bKY">
                             <connections>
                                 <action selector="addLocation:" destination="d4p-OE-Jey" id="pms-dc-C5k"/>
@@ -444,7 +444,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <textAttributes key="titleTextAttributes">
-                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <color key="textColor" red="0.47809319490000002" green="1" blue="0.47727206560000002" alpha="1" colorSpace="calibratedRGB"/>
                         </textAttributes>
                     </navigationBar>
                     <nil name="viewControllers"/>

@@ -34,7 +34,7 @@
 - (MADHourly *)currentHourlyWeather:(NSDictionary *)results {
     MADHourly *currentCondition = (MADHourly *)[NSEntityDescription insertNewObjectForEntityForName:@"MADHourly" inManagedObjectContext:[[MADCoreDataStack sharedCoreDataStack] managedObjectContext]];
     
-    currentCondition.date = [NSDate startOfDay];
+    currentCondition.date = [NSDate startCurrentDay];
     currentCondition.weatherDesc = results[@"weatherDesc"][0][@"value"];
     currentCondition.currentTempC = results[@"temp_C"];
     currentCondition.currentTempF = results[@"temp_F"];

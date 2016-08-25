@@ -42,16 +42,20 @@
 - (void)downloadDataWithLocationName:(NSString *)locationName days:(NSNumber *)days callBack:(void (^)(NSDictionary *results))callBack {
     NSString *srtURL = [NSString stringWithFormat:@"http://api.worldweatheronline.com/premium/v1/weather.ashx?key=eb8899f2e04349c298291316160208&q=%@&format=json&num_of_days=%@", [self preparePlaceForWork:locationName], days];
     [self loadDataWithURL:srtURL callBack:^(NSData *data) {
-        //        Check for JSON error
-        NSError *JSONerror;
-        NSDictionary *results = [NSJSONSerialization JSONObjectWithData:data
-                                                                options:NSJSONReadingMutableContainers
-                                                                  error:&JSONerror];
-        
-        if (JSONerror) {
-            NSLog(@"Error: Couldn't parse response: %@", JSONerror);
+        if (data == nil) {
+             callBack(nil);
+        } else {
+            //        Check for JSON error
+            NSError *JSONerror;
+            NSDictionary *results = [NSJSONSerialization JSONObjectWithData:data
+                                                                    options:NSJSONReadingMutableContainers
+                                                                      error:&JSONerror];
+            
+            if (JSONerror) {
+                NSLog(@"Error: Couldn't parse response: %@", JSONerror);
+            }
+            callBack(results);
         }
-        callBack(results);
     }];
 }
 
