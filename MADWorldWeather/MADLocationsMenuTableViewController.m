@@ -33,6 +33,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self configureRefreshControl];
     
     _locationsArray = [[NSMutableArray alloc] init];
     _fetchedResults = [[MADFetchedResults alloc] init];
@@ -42,6 +43,26 @@
 
     [self.tableView registerNib:[UINib nibWithNibName:@"MADLocationsMenuTableViewCell" bundle:nil] forCellReuseIdentifier:@"MADLocationsMenuTableViewCell"];
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"cell"];
+}
+
+- (void)configureRefreshControl {
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    self.refreshControl.backgroundColor = [UIColor blackColor];
+    self.refreshControl.tintColor = [UIColor whiteColor];
+    [self.refreshControl addTarget:self
+                            action:@selector(refreshControlRequest)
+                  forControlEvents:UIControlEventValueChanged];
+}
+
+- (void)refreshControlRequest {
+    NSArray *cities = [_fetchedResults.fetchedResultsController.fetchedObjects valueForKeyPath:@"name"];
+    
+    for (NSString *city in cities) {
+        [[MADDownloader sharedDownloader] downloadDataWithLocationName:city days:[NSNumber numberWithInteger:1] callBack:^(NSDictionary *results) {
+            [[MADCoreDataStack sharedCoreDataStack] updateObjects:results];
+            [self.refreshControl endRefreshing];
+        }];
+    }
 }
 
 - (IBAction)addLocation:(UIBarButtonItem *)sender {

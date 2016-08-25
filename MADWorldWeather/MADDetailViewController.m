@@ -72,7 +72,6 @@
 }
 
 - (void)configureObservationWeatherViews {
-//    NSPredicate *weatherPredicate = [NSPredicate predicateWithFormat:@"date = %@", [NSDate formattedDate]];
     _currentWeather = [_city.weather.allObjects sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"date" ascending:NO]]].firstObject;
     
     _maxTempLabel.text = [NSString stringWithFormat:@"max - %@°", _currentWeather.maxTempC];

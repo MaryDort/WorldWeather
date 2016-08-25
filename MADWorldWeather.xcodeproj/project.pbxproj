@@ -22,6 +22,7 @@
 		84442D4C1D6C960200CB8606 /* MADWeather.m in Sources */ = {isa = PBXBuildFile; fileRef = 84442D441D6C960200CB8606 /* MADWeather.m */; };
 		84442D4D1D6C960200CB8606 /* MADCity+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 84442D461D6C960200CB8606 /* MADCity+CoreDataProperties.m */; };
 		84442D4E1D6C960200CB8606 /* MADCity.m in Sources */ = {isa = PBXBuildFile; fileRef = 84442D481D6C960200CB8606 /* MADCity.m */; };
+		84442D541D6F56A100CB8606 /* MADWeatherParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 84442D531D6F56A100CB8606 /* MADWeatherParser.m */; };
 		84AD17B21D50A0B4003FB8E2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 84AD17B11D50A0B4003FB8E2 /* main.m */; };
 		84AD17B51D50A0B4003FB8E2 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 84AD17B41D50A0B4003FB8E2 /* AppDelegate.m */; };
 		84AD17B81D50A0B4003FB8E2 /* MADDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84AD17B71D50A0B4003FB8E2 /* MADDetailViewController.m */; };
@@ -65,6 +66,8 @@
 		84442D461D6C960200CB8606 /* MADCity+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "MADCity+CoreDataProperties.m"; path = "MADWorldWeather/MADCity+CoreDataProperties.m"; sourceTree = "<group>"; };
 		84442D471D6C960200CB8606 /* MADCity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADCity.h; path = MADWorldWeather/MADCity.h; sourceTree = "<group>"; };
 		84442D481D6C960200CB8606 /* MADCity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADCity.m; path = MADWorldWeather/MADCity.m; sourceTree = "<group>"; };
+		84442D521D6F56A100CB8606 /* MADWeatherParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADWeatherParser.h; path = MADWorldWeather/MADWeatherParser.h; sourceTree = "<group>"; };
+		84442D531D6F56A100CB8606 /* MADWeatherParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADWeatherParser.m; path = MADWorldWeather/MADWeatherParser.m; sourceTree = "<group>"; };
 		84AD17AD1D50A0B4003FB8E2 /* MADWorldWeather.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MADWorldWeather.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		84AD17B11D50A0B4003FB8E2 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		84AD17B31D50A0B4003FB8E2 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -101,6 +104,8 @@
 		84AD17A41D50A0B4003FB8E2 = {
 			isa = PBXGroup;
 			children = (
+				84442D521D6F56A100CB8606 /* MADWeatherParser.h */,
+				84442D531D6F56A100CB8606 /* MADWeatherParser.m */,
 				84442D3D1D6C960200CB8606 /* MADHourly+CoreDataProperties.h */,
 				84442D3E1D6C960200CB8606 /* MADHourly+CoreDataProperties.m */,
 				84442D3F1D6C960200CB8606 /* MADHourly.h */,
@@ -266,6 +271,7 @@
 				84442CE21D6B111400CB8606 /* NSDate+MADDateFormatter.m in Sources */,
 				84AD17B21D50A0B4003FB8E2 /* main.m in Sources */,
 				84442D4A1D6C960200CB8606 /* MADHourly.m in Sources */,
+				84442D541D6F56A100CB8606 /* MADWeatherParser.m in Sources */,
 				84442D4B1D6C960200CB8606 /* MADWeather+CoreDataProperties.m in Sources */,
 				84442D4E1D6C960200CB8606 /* MADCity.m in Sources */,
 				84442D4D1D6C960200CB8606 /* MADCity+CoreDataProperties.m in Sources */,
