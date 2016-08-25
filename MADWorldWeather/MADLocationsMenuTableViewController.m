@@ -24,6 +24,8 @@
 @property (strong, nonatomic, readwrite) MADLocationSearchTableViewController *searchResultsController;
 @property (strong, nonatomic, readwrite) __block MADFetchedResults *fetchedResults;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *addBarButtonItem;
+@property (strong, nonatomic) IBOutlet UIView *backgraundView;
+
 
 @end
 
@@ -33,9 +35,11 @@
     [super viewDidLoad];
     
     _locationsArray = [[NSMutableArray alloc] init];
-    _fetchedResults = [[MADFetchedResults alloc] initWithDate:[NSDate date]];
+    _fetchedResults = [[MADFetchedResults alloc] init];
     _fetchedResults.fetchedResultsController.delegate = self;
     
+    self.tableView.backgroundView = self.backgraundView;
+
     [self.tableView registerNib:[UINib nibWithNibName:@"MADLocationsMenuTableViewCell" bundle:nil] forCellReuseIdentifier:@"MADLocationsMenuTableViewCell"];
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"cell"];
 }
@@ -98,7 +102,12 @@
     [self.navigationController pushViewController:detailViewController animated:YES];
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 0.1f;
+}
+
 #pragma mark - Fetched Results Controller Delegate
+
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
     // The fetch controller is about to start sending change notifications, so prepare the table view for updates.
     [self.tableView beginUpdates];

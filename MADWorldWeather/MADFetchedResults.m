@@ -10,23 +10,7 @@
 #import "MADCoreDataStack.h"
 #include "NSDate+MADDateFormatter.h"
 
-@interface MADFetchedResults ()
-
-@property (nonatomic, readwrite, strong) NSDate *currentDate;
-
-@end
-
 @implementation MADFetchedResults
-
-- (instancetype)initWithDate:(NSDate *)currentDate {
-    self = [super init];
-    
-    if (self) {
-        _currentDate = [NSDate formattedDate];
-    }
-    
-    return self;
-}
 
 - (NSFetchedResultsController *)fetchedResultsController {
     if (_fetchedResultsController) {

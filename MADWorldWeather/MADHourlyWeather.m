@@ -1,5 +1,5 @@
 //
-//  MADWeatherDescription.m
+//  MADHourlyWeather.m
 //  MADWorldWeather
 //
 //  Created by Mariia Cherniuk on 03.08.16.

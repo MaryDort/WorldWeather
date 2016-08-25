@@ -14,6 +14,4 @@
 @property (nonatomic, readwrite, strong) NSFetchedResultsController *fetchedResultsController;
 @property (strong, nonatomic, readwrite) NSManagedObjectContext *managedObjectContext;
 
-- (instancetype)initWithDate:(NSDate *)currentDate;
-
 @end

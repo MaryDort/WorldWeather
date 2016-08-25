@@ -19,6 +19,7 @@
 @interface MADDetailViewController ()
 
 @property (weak, nonatomic) IBOutlet UILabel *weatherDesc;
+@property (weak, nonatomic) IBOutlet UIVisualEffectView *fondSunMoonVisualEffectView;
 @property (weak, nonatomic) IBOutlet UIImageView *currentWeatherImageView;
 @property (weak, nonatomic) IBOutlet UIImageView *moonriseImageView;
 @property (weak, nonatomic) IBOutlet UIImageView *moonsetImageView;
@@ -30,16 +31,17 @@
 @property (weak, nonatomic) IBOutlet UILabel *sunsetLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *currentWeatherIcon;
 @property (weak, nonatomic) IBOutlet UILabel *currentWeatherTemp;
-@property (weak, nonatomic) IBOutlet UILabel *location;
 @property (weak, nonatomic) IBOutlet UILabel *humidityValueLabel;
 @property (weak, nonatomic) IBOutlet UILabel *pressureValueLabel;
 @property (weak, nonatomic) IBOutlet UILabel *windValueLabel;
 @property (weak, nonatomic) IBOutlet UITableView *hourlyWeatherTabelView;
+
+
+
 @property (weak, nonatomic) IBOutlet UITableView *forecastWeatherTabelView;
 @property (weak, nonatomic) IBOutlet UILabel *descriptionTabelName;
 @property (weak, nonatomic) IBOutlet UILabel *maxTempLabel;
 @property (weak, nonatomic) IBOutlet UILabel *minTempLabel;
-@property (weak, nonatomic) IBOutlet UILabel *weatherDescription;
 @property (weak, nonatomic) IBOutlet UIVisualEffectView *fondVisualEffectView;
 @property (weak, nonatomic) IBOutlet UIVisualEffectView *tabelVisualEffectView;
 
@@ -70,23 +72,21 @@
 }
 
 - (void)configureObservationWeatherViews {
-    _fondVisualEffectView.layer.cornerRadius = 10.f;
-    _fondVisualEffectView.layer.masksToBounds = YES;
-
 //    NSPredicate *weatherPredicate = [NSPredicate predicateWithFormat:@"date = %@", [NSDate formattedDate]];
     _currentWeather = [_city.weather.allObjects sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"date" ascending:NO]]].firstObject;
     
     _maxTempLabel.text = [NSString stringWithFormat:@"max - %@°", _currentWeather.maxTempC];
     _minTempLabel.text = [NSString stringWithFormat:@"min - %@°", _currentWeather.minTempC];
+    _fondSunMoonVisualEffectView.layer.masksToBounds = YES;
+    _fondSunMoonVisualEffectView.layer.cornerRadius = 5.f;
     _moonriseLabel.text = _currentWeather.moonrise;
     _moonsetLabel.text = _currentWeather.moonset;
     _sunriseLabel.text = _currentWeather.sunrise;
     _sunsetLabel.text = _currentWeather.sunset;
     
     _observationHourly = _city.currentHourlyWeather;
-    
+    _weatherDesc.text = _observationHourly.weatherDesc;
     NSLog(@"%@", _observationHourly.weatherDesc);
-    
     
     if ([_observationHourly.weatherDesc containsString:@"Sunny"]) {
         _currentWeatherImageView.image = [UIImage imageNamed:@"sunny"];
@@ -100,7 +100,7 @@
     } else if ([_observationHourly.weatherDesc containsString:@"Clear"]) {
         _currentWeatherImageView.image = [UIImage imageNamed:@"clear"];
         _currentWeatherIcon.image = [UIImage imageNamed:@"sun"];
-    } else if ([_observationHourly.weatherDesc containsString:@"Light Rain"]) {
+    } else if ([_observationHourly.weatherDesc containsString:@"Light Rain"] || [_observationHourly.weatherDesc containsString:@"Light rain shower"]) {
         _currentWeatherImageView.image = [UIImage imageNamed:@"lightRain"];
         _currentWeatherIcon.image = [UIImage imageNamed:@"rain"];
     } else if ([_observationHourly.weatherDesc containsString:@"Moderate rain"]) {
@@ -111,12 +111,12 @@
         _currentWeatherIcon.image = [UIImage imageNamed:@"fogIcon"];
     }
 
-    
+    _fondVisualEffectView.layer.cornerRadius = 5.f;
+    _fondVisualEffectView.layer.masksToBounds = YES;
     _currentWeatherTemp.text = [NSString stringWithFormat:@"%@°", _observationHourly.currentTempC];
     _humidityValueLabel.text = [NSString stringWithFormat:@"Humidity %@ %%", _observationHourly.humidity];
     _pressureValueLabel.text = [NSString stringWithFormat:@"Pressure %@ hPa", _observationHourly.pressure];
     _windValueLabel.text = [NSString stringWithFormat:@"%@", _observationHourly.windSpeed];
-    _weatherDescription.text = _observationHourly.weatherDesc;
 }
 
 - (void)configureHourlyWeatherTabelView {
@@ -125,7 +125,7 @@
     
     _hourlyWeatherTabelView.dataSource = _hourlyWeather;
     _hourlyWeatherTabelView.delegate = _hourlyWeather;
-    _tabelVisualEffectView.layer.cornerRadius = 10.f;
+    _tabelVisualEffectView.layer.cornerRadius = 5.f;
     _tabelVisualEffectView.layer.masksToBounds = YES;
     
     [_hourlyWeatherTabelView reloadData];
@@ -148,7 +148,7 @@
     
     _forecastWeatherTabelView.dataSource = _forecastWeather;
     _forecastWeatherTabelView.delegate = _forecastWeather;
-    _forecastWeatherTabelView.layer.cornerRadius = 10.f;
+    _forecastWeatherTabelView.layer.cornerRadius = 5.f;
     [_forecastWeatherTabelView reloadData];
 }
 
