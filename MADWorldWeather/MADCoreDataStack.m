@@ -97,11 +97,11 @@
 }
 
 - (void)saveObjects:(NSDictionary *)results {
-    BOOL uniqueCurrentCondition = [self uniquenessCurrentConditionCheck:results[@"data"][@"current_condition"][0][@"observation_time"] cityName:results[@"data"][@"request"][0][@"query"]];
-    MADHourly *currentCondition = nil;
-    
-    if (!uniqueCurrentCondition) {
-        currentCondition = (MADHourly *)[NSEntityDescription insertNewObjectForEntityForName:@"MADHourly" inManagedObjectContext:self.managedObjectContext];
+//    BOOL uniqueCurrentCondition = [self uniquenessCurrentConditionCheck:results[@"data"][@"current_condition"][0][@"observation_time"] cityName:results[@"data"][@"request"][0][@"query"]];
+//    MADHourly *currentCondition = nil;
+//    
+//    if (!uniqueCurrentCondition) {
+       MADHourly *currentCondition = (MADHourly *)[NSEntityDescription insertNewObjectForEntityForName:@"MADHourly" inManagedObjectContext:self.managedObjectContext];
         
         currentCondition.date = [NSDate startOfDay];
         currentCondition.weatherDesc = results[@"data"][@"current_condition"][0][@"weatherDesc"][0][@"value"];
@@ -114,14 +114,14 @@
         currentCondition.feelsLikeF = results[@"data"][@"current_condition"][0][@"FeelsLikeF"];
         currentCondition.feelsLikeC = results[@"data"][@"current_condition"][0][@"FeelsLikeC"];
         currentCondition.observationTime = results[@"data"][@"current_condition"][0][@"observation_time"];
-    }
+//    }
     
     MADCity *city = (MADCity*)[NSEntityDescription insertNewObjectForEntityForName:@"MADCity" inManagedObjectContext:self.managedObjectContext];
     
     city.name = results[@"data"][@"request"][0][@"query"];
-    if (currentCondition != nil) {
+//    if (currentCondition != nil) {
         city.currentHourlyWeather = currentCondition;
-    }
+//    }
     [self removeOutdatedWeatherByCity:city];
     
     NSArray *workingDates = [self custDate:[results[@"data"][@"weather"] valueForKeyPath:@"date"]];

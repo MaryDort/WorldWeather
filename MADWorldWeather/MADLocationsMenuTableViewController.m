@@ -48,9 +48,18 @@
     _searchResultsController = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"MADLocationSearchTableViewController"];
     _searchController = [[UISearchController alloc] initWithSearchResultsController:_searchResultsController];
     _searchController.searchResultsUpdater = _searchResultsController;
+    __weak MADLocationsMenuTableViewController *tempVC = self;
     _searchResultsController.complitionBlock = ^void(NSString *placeName) {
         [[MADDownloader sharedDownloader] downloadDataWithLocationName:placeName days:[NSNumber numberWithInteger:1] callBack:^(NSDictionary *results) {
-            [[MADCoreDataStack sharedCoreDataStack] saveObjects:results];
+            if ([results[@"data"][@"error"] count] == 0) {
+                [[MADCoreDataStack sharedCoreDataStack] saveObjects:results];
+            } else {
+                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Failed" message:@"Unable to find city" preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *action = [UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleCancel handler:nil];
+                
+                [alertController addAction:action];
+                [tempVC presentViewController:alertController animated:YES completion:nil];
+            }
         }];
     };
     
