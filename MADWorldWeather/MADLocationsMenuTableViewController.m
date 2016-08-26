@@ -68,7 +68,7 @@
             if (results[@"data"][@"error"] == nil && results != nil) {
                 [[MADCoreDataStack sharedCoreDataStack] updateObjects:results];
             } else {
-                [strongSelf showFailedAlertWithMessage:@"Server error! Try next time."];
+                [strongSelf showFailedAlertWithMessage:[NSString stringWithFormat:@"Server error! Can't load %@ weather. Try next time.", city]];
             }
             [self.refreshControl endRefreshing];
         }];

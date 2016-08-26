@@ -63,11 +63,9 @@
     _currentDate = [NSDate formattedDate];
     
     [_hourlyWeatherTabelView registerNib:[UINib nibWithNibName:@"MADHourlyWeatherTableViewCell" bundle:nil] forCellReuseIdentifier:@"MADHourlyWeatherTableViewCell"];
-    [_forecastWeatherTabelView registerNib:[UINib nibWithNibName:@"MADForecastWeatherTableViewCell" bundle:nil] forCellReuseIdentifier:@"MADForecastWeatherTableViewCell"];
-    
+
     [self configureObservationWeatherViews];
     [self configureHourlyWeatherTabelView];
-//    [self configureForecastWeatherTabelView];
 }
 
 - (void)configureObservationWeatherViews {
