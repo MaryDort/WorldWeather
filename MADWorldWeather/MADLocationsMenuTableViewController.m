@@ -67,7 +67,7 @@
             if (results[@"data"][@"error"] == nil) {
                 [[MADCoreDataStack sharedCoreDataStack] updateObjects:results];
             } else {
-                [strongSelf showFailedAlertWithMessage:@"Server error"];
+                [strongSelf showFailedAlertWithMessage:@"Server error! Try next time."];
             }
             [self.refreshControl endRefreshing];
         }];
@@ -84,7 +84,7 @@
             MADLocationsMenuTableViewController *strongSelf = weakSelf;
             
             if (results == nil || results[@"data"][@"error"] != nil){
-                [strongSelf showFailedAlertWithMessage:@"Unable to find city"];
+                [strongSelf showFailedAlertWithMessage:@"Unable to find city!"];
             } else {
                 [[MADCoreDataStack sharedCoreDataStack] saveObjects:results];
             }
@@ -109,8 +109,12 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     MADLocationsMenuTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MADLocationsMenuTableViewCell"];
     MADCity *city = [_fetchedResults.fetchedResultsController objectAtIndexPath:indexPath];
+    NSString *temp = city.name;
     
-    cell.currentLocationNameLabel.text = city.name;
+    if ([temp containsString:@"United States of America"]) {
+        temp = [temp stringByReplacingOccurrencesOfString:@"United States of America" withString:@"USA"];
+    }
+    cell.currentLocationNameLabel.text = temp;
     cell.currentTempLabel.text = [NSString stringWithFormat:@"%@°", city.currentHourlyWeather.currentTempC];
 
     return cell;

@@ -59,7 +59,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.navigationItem.title = _city.name;
+
+    if ([_city.name containsString:@"United States of America"]) {
+        self.navigationItem.title = [_city.name stringByReplacingOccurrencesOfString:@"United States of America" withString:@"USA"];
+    } else {
+        self.navigationItem.title = _city.name;
+    }
     
     _currentDate = [NSDate formattedDate];
     
@@ -93,13 +98,13 @@
     } else if ([_observationHourly.weatherDesc containsString:@"Partly Cloudy"]) {
         _currentWeatherImageView.image = [UIImage imageNamed:@"part"];
         _currentWeatherIcon.image = [UIImage imageNamed:@"partly"];
-    } else if ([_observationHourly.weatherDesc containsString:@"Overcast"]) {
+    } else if ([_observationHourly.weatherDesc containsString:@"Overcast"] || [_observationHourly.weatherDesc containsString:@"Cloudy"]) {
         _currentWeatherImageView.image = [UIImage imageNamed:@"over"];
         _currentWeatherIcon.image = [UIImage imageNamed:@"overcast"];
     } else if ([_observationHourly.weatherDesc containsString:@"Clear"]) {
         _currentWeatherImageView.image = [UIImage imageNamed:@"clear"];
         _currentWeatherIcon.image = [UIImage imageNamed:@"sun"];
-    } else if ([_observationHourly.weatherDesc containsString:@"Light Rain"] || [_observationHourly.weatherDesc containsString:@"Light rain shower"]) {
+    } else if ([_observationHourly.weatherDesc containsString:@"Light Rain"] || [_observationHourly.weatherDesc containsString:@"Light rain shower"] || [_observationHourly.weatherDesc containsString:@"Light drizzle"] || [_observationHourly.weatherDesc containsString:@"Patchy light drizzle"]) {
         _currentWeatherImageView.image = [UIImage imageNamed:@"lightRain"];
         _currentWeatherIcon.image = [UIImage imageNamed:@"rain"];
     } else if ([_observationHourly.weatherDesc containsString:@"Moderate rain"]) {
@@ -108,8 +113,14 @@
     } else if ([_observationHourly.weatherDesc containsString:@"Fog"] || [_observationHourly.weatherDesc containsString:@"Haze"]) {
         _currentWeatherImageView.image = [UIImage imageNamed:@"fog"];
         _currentWeatherIcon.image = [UIImage imageNamed:@"fogIcon"];
+    } else if ([_observationHourly.weatherDesc containsString:@"Thunderstorm"] && [_observationHourly.weatherDesc containsString:@"Heavy Rain"]) {
+        _currentWeatherImageView.image = [UIImage imageNamed:@"heavyRain"];
+        _currentWeatherIcon.image = [UIImage imageNamed:@"storm"];
+    } else if ([_observationHourly.weatherDesc containsString:@"Thunderstorm"]) {
+        _currentWeatherImageView.image = [UIImage imageNamed:@"thunderstorm"];
+        _currentWeatherIcon.image = [UIImage imageNamed:@"storm"];
     }
-
+    
     _fondVisualEffectView.layer.cornerRadius = 5.f;
     _fondVisualEffectView.layer.masksToBounds = YES;
     _currentWeatherTemp.text = [NSString stringWithFormat:@"%@°", _observationHourly.currentTempC];
@@ -130,26 +141,26 @@
     [_hourlyWeatherTabelView reloadData];
 }
 
-- (void)configureForecastWeatherTabelView {
-    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"MADWeather"
-                                                         inManagedObjectContext:_managedObjectContext];
-    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"date" ascending:YES];
-    self.fetchedResultsController.fetchRequest.entity = entityDescription;
-    self.fetchedResultsController.fetchRequest.sortDescriptors = @[sortDescriptor];
-    self.fetchedResultsController.fetchRequest.predicate = [NSPredicate predicateWithFormat:@"date > %@", _currentDate];
-    
-    NSError *error = nil;
-    if (![self.fetchedResultsController performFetch:&error]) {
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-    }
-    
-    _forecastWeather = [[MADForecastWeather alloc] initWithForecastInfo:self.fetchedResultsController.fetchedObjects];
-    
-    _forecastWeatherTabelView.dataSource = _forecastWeather;
-    _forecastWeatherTabelView.delegate = _forecastWeather;
-    _forecastWeatherTabelView.layer.cornerRadius = 5.f;
-    [_forecastWeatherTabelView reloadData];
-}
+//- (void)configureForecastWeatherTabelView {
+//    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"MADWeather"
+//                                                         inManagedObjectContext:_managedObjectContext];
+//    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"date" ascending:YES];
+//    self.fetchedResultsController.fetchRequest.entity = entityDescription;
+//    self.fetchedResultsController.fetchRequest.sortDescriptors = @[sortDescriptor];
+//    self.fetchedResultsController.fetchRequest.predicate = [NSPredicate predicateWithFormat:@"date > %@", _currentDate];
+//    
+//    NSError *error = nil;
+//    if (![self.fetchedResultsController performFetch:&error]) {
+//        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+//    }
+//    
+//    _forecastWeather = [[MADForecastWeather alloc] initWithForecastInfo:self.fetchedResultsController.fetchedObjects];
+//    
+//    _forecastWeatherTabelView.dataSource = _forecastWeather;
+//    _forecastWeatherTabelView.delegate = _forecastWeather;
+//    _forecastWeatherTabelView.layer.cornerRadius = 5.f;
+//    [_forecastWeatherTabelView reloadData];
+//}
 
 - (NSArray *)prepareHourlyForWork:(NSArray *)objects {
     NSSortDescriptor *sortDesc = [NSSortDescriptor sortDescriptorWithKey:@"time" ascending:YES];
