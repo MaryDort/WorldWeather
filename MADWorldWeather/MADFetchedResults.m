@@ -22,7 +22,6 @@
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"MADCity"
                                               inManagedObjectContext:_managedObjectContext];
     request.entity = entity;
-    request.fetchBatchSize = 1;
     request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]];
     
     NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc]

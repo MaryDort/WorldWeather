@@ -9,12 +9,11 @@
 #import "MADDetailViewController.h"
 #import "MADDownloader.h"
 #import "MADCoreDataStack.h"
-#import "CoreData/CoreData.h"
-#import "MADHourlyWeather.h"
-#import "MADForecastWeather.h"
 #import "MADWeather.h"
 #import "MADHourly.h"
 #import "NSDate+MADDateFormatter.h"
+#import "MADArrayTableViewDataSource.h"
+#import "MADHourlyWeatherTableViewCell.h"
 
 @interface MADDetailViewController ()
 
@@ -35,10 +34,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *pressureValueLabel;
 @property (weak, nonatomic) IBOutlet UILabel *windValueLabel;
 @property (weak, nonatomic) IBOutlet UITableView *hourlyWeatherTabelView;
-
-
-
-@property (weak, nonatomic) IBOutlet UITableView *forecastWeatherTabelView;
 @property (weak, nonatomic) IBOutlet UILabel *descriptionTabelName;
 @property (weak, nonatomic) IBOutlet UILabel *maxTempLabel;
 @property (weak, nonatomic) IBOutlet UILabel *minTempLabel;
@@ -47,11 +42,10 @@
 
 @property (nonatomic, readwrite, strong) NSFetchedResultsController *fetchedResultsController;
 @property (strong, nonatomic, readwrite) NSManagedObjectContext *managedObjectContext;
-@property (nonatomic, readwrite, strong) MADHourlyWeather *hourlyWeather;
-@property (nonatomic, readwrite, strong) MADForecastWeather *forecastWeather;
 @property (nonatomic, readwrite, strong) NSDate *currentDate;
 @property (nonatomic, readwrite, strong) MADWeather *currentWeather;
 @property (nonatomic, readwrite, strong) MADHourly *observationHourly;
+@property (nonatomic, readwrite, strong) MADArrayTableViewDataSource *hourlyDataSource;
 
 @end
 
@@ -130,42 +124,31 @@
 }
 
 - (void)configureHourlyWeatherTabelView {
-    _hourlyWeather = [[MADHourlyWeather alloc] initWithDate:_currentDate
-                                                 hourlyInfo:_currentWeather.hourly.allObjects];
+    NSSortDescriptor *sortDesc = [NSSortDescriptor sortDescriptorWithKey:@"time" ascending:YES];
+    NSArray *sortedHourly = [_currentWeather.hourly.allObjects sortedArrayUsingDescriptors:@[sortDesc]];
     
-    _hourlyWeatherTabelView.dataSource = _hourlyWeather;
-    _hourlyWeatherTabelView.delegate = _hourlyWeather;
+    self.hourlyDataSource = [[MADArrayTableViewDataSource alloc] initWithObjects:sortedHourly cellForRowAtIndexPathBlock:^UITableViewCell *(UITableView *tableView, NSIndexPath *indexPath, id object) {
+        MADHourlyWeatherTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MADHourlyWeatherTableViewCell"];
+        MADHourly *hourly = object;
+        
+        cell.timeLabel.text = [NSString stringWithFormat:@"%@:00", hourly.time];
+        cell.tempLabel.text = [NSString stringWithFormat:@"%@°", hourly.currentTempC];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        
+        if (!hourly.icon) {
+            [[MADDownloader sharedDownloader] downloadDataWithURL:hourly.weatherIconURL callBack:^(NSData *imageData) {
+                cell.descriptionIconImageView.image = [UIImage imageWithData:imageData];
+            }];
+        } else {
+            cell.descriptionIconImageView.image = [UIImage imageWithData:hourly.icon];
+        }
+        
+        return cell;
+    }];
+    
+    _hourlyWeatherTabelView.dataSource = _hourlyDataSource;
     _tabelVisualEffectView.layer.cornerRadius = 5.f;
     _tabelVisualEffectView.layer.masksToBounds = YES;
-    
-    [_hourlyWeatherTabelView reloadData];
-}
-
-//- (void)configureForecastWeatherTabelView {
-//    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"MADWeather"
-//                                                         inManagedObjectContext:_managedObjectContext];
-//    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"date" ascending:YES];
-//    self.fetchedResultsController.fetchRequest.entity = entityDescription;
-//    self.fetchedResultsController.fetchRequest.sortDescriptors = @[sortDescriptor];
-//    self.fetchedResultsController.fetchRequest.predicate = [NSPredicate predicateWithFormat:@"date > %@", _currentDate];
-//    
-//    NSError *error = nil;
-//    if (![self.fetchedResultsController performFetch:&error]) {
-//        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-//    }
-//    
-//    _forecastWeather = [[MADForecastWeather alloc] initWithForecastInfo:self.fetchedResultsController.fetchedObjects];
-//    
-//    _forecastWeatherTabelView.dataSource = _forecastWeather;
-//    _forecastWeatherTabelView.delegate = _forecastWeather;
-//    _forecastWeatherTabelView.layer.cornerRadius = 5.f;
-//    [_forecastWeatherTabelView reloadData];
-//}
-
-- (NSArray *)prepareHourlyForWork:(NSArray *)objects {
-    NSSortDescriptor *sortDesc = [NSSortDescriptor sortDescriptorWithKey:@"time" ascending:YES];
-    
-    return [objects sortedArrayUsingDescriptors:@[sortDesc]];
 }
 
 @end
