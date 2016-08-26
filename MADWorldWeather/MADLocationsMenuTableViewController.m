@@ -64,7 +64,7 @@
         [[MADDownloader sharedDownloader] downloadDataWithLocationName:city days:[NSNumber numberWithInteger:1] callBack:^(NSDictionary *results) {
             MADLocationsMenuTableViewController *strongSelf = weakSelf;
             
-            if (results[@"data"][@"error"] == nil) {
+            if (results[@"data"][@"error"] == nil && results != nil) {
                 [[MADCoreDataStack sharedCoreDataStack] updateObjects:results];
             } else {
                 [strongSelf showFailedAlertWithMessage:@"Server error! Try next time."];
