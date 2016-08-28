@@ -14,6 +14,7 @@
 #import "NSDate+MADDateFormatter.h"
 #import "MADArrayTableViewDataSource.h"
 #import "MADHourlyWeatherTableViewCell.h"
+#import "MADWeatherImageProvider.h"
 
 @interface MADDetailViewController ()
 
@@ -46,6 +47,7 @@
 @property (nonatomic, readwrite, strong) MADWeather *currentWeather;
 @property (nonatomic, readwrite, strong) MADHourly *observationHourly;
 @property (nonatomic, readwrite, strong) MADArrayTableViewDataSource *hourlyDataSource;
+@property (nonatomic, readwrite, strong) MADWeatherImageProvider *weatherImageProvider;
 
 @end
 
@@ -82,36 +84,10 @@
     
     _observationHourly = _city.currentHourlyWeather;
     _weatherDesc.text = _observationHourly.weatherDesc;
-    NSLog(@"%@", _observationHourly.weatherDesc);
-    
-    if ([_observationHourly.weatherDesc containsString:@"Sunny"]) {
-        _currentWeatherImageView.image = [UIImage imageNamed:@"sunny"];
-        _currentWeatherIcon.image = [UIImage imageNamed:@"sun"];
-    } else if ([_observationHourly.weatherDesc containsString:@"Partly Cloudy"]) {
-        _currentWeatherImageView.image = [UIImage imageNamed:@"part"];
-        _currentWeatherIcon.image = [UIImage imageNamed:@"partly"];
-    } else if ([_observationHourly.weatherDesc containsString:@"Overcast"] || [_observationHourly.weatherDesc containsString:@"Cloudy"]) {
-        _currentWeatherImageView.image = [UIImage imageNamed:@"over"];
-        _currentWeatherIcon.image = [UIImage imageNamed:@"overcast"];
-    } else if ([_observationHourly.weatherDesc containsString:@"Clear"]) {
-        _currentWeatherImageView.image = [UIImage imageNamed:@"clear"];
-        _currentWeatherIcon.image = [UIImage imageNamed:@"sun"];
-    } else if ([_observationHourly.weatherDesc containsString:@"Light Rain"] || [_observationHourly.weatherDesc containsString:@"Light rain shower"] || [_observationHourly.weatherDesc containsString:@"Light drizzle"] || [_observationHourly.weatherDesc containsString:@"Patchy light drizzle"]) {
-        _currentWeatherImageView.image = [UIImage imageNamed:@"lightRain"];
-        _currentWeatherIcon.image = [UIImage imageNamed:@"rain"];
-    } else if ([_observationHourly.weatherDesc containsString:@"Moderate rain"]) {
-        _currentWeatherImageView.image = [UIImage imageNamed:@"moderateRain"];
-        _currentWeatherIcon.image = [UIImage imageNamed:@"rain"];
-    } else if ([_observationHourly.weatherDesc containsString:@"Fog"] || [_observationHourly.weatherDesc containsString:@"Haze"]) {
-        _currentWeatherImageView.image = [UIImage imageNamed:@"fog"];
-        _currentWeatherIcon.image = [UIImage imageNamed:@"fogIcon"];
-    } else if ([_observationHourly.weatherDesc containsString:@"Thunderstorm"] && [_observationHourly.weatherDesc containsString:@"Heavy Rain"]) {
-        _currentWeatherImageView.image = [UIImage imageNamed:@"heavyRain"];
-        _currentWeatherIcon.image = [UIImage imageNamed:@"storm"];
-    } else if ([_observationHourly.weatherDesc containsString:@"Thunderstorm"]) {
-        _currentWeatherImageView.image = [UIImage imageNamed:@"thunderstorm"];
-        _currentWeatherIcon.image = [UIImage imageNamed:@"storm"];
-    }
+
+    _weatherImageProvider = [[MADWeatherImageProvider alloc] init];
+    _currentWeatherImageView.image = [_weatherImageProvider backgroundImageForHourlyWeather:_observationHourly];
+    _currentWeatherIcon.image = [_weatherImageProvider weatherIconForHourlyWeather:_observationHourly];
     
     _fondVisualEffectView.layer.cornerRadius = 5.f;
     _fondVisualEffectView.layer.masksToBounds = YES;

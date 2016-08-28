@@ -45,6 +45,7 @@
     currentCondition.feelsLikeF = results[@"FeelsLikeF"];
     currentCondition.feelsLikeC = results[@"FeelsLikeC"];
     currentCondition.observationTime = results[@"observation_time"];
+    currentCondition.weatherCode = @([results[@"weatherCode"] integerValue]);
     
     return currentCondition;
 }
@@ -69,7 +70,7 @@
         for (NSDictionary *hourlyData in data[@"hourly"]) {
             MADHourly *hourly = (MADHourly *)[NSEntityDescription insertNewObjectForEntityForName:@"MADHourly" inManagedObjectContext:_managedObjectContext];
             
-            hourly.time = [NSNumber numberWithInteger:[hourlyData[@"time"] integerValue]/100];
+            hourly.time = @([hourlyData[@"time"] integerValue]/100);
             hourly.weatherDesc = hourlyData[@"weatherDesc"][0][@"value"];
             hourly.currentTempC = hourlyData[@"tempC"];
             hourly.currentTempF = hourlyData[@"tempF"];
@@ -80,6 +81,7 @@
             hourly.feelsLikeF = hourlyData[@"FeelsLikeF"];
             hourly.feelsLikeC = hourlyData[@"FeelsLikeC"];
             hourly.date = weather.date;
+            hourly.weatherCode = @([hourlyData[@"weatherCode"] integerValue]);
             
             [hourlySet addObject:hourly];
         }

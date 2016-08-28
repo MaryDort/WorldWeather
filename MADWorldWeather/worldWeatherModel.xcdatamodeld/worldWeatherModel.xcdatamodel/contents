@@ -16,6 +16,7 @@
         <attribute name="observationTime" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="pressure" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="time" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="weatherCode" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="weatherDesc" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="weatherIconURL" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="windSpeed" optional="YES" attributeType="String" syncable="YES"/>
@@ -36,8 +37,8 @@
         <relationship name="hourly" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="MADHourly" inverseName="weather" inverseEntity="MADHourly" syncable="YES"/>
     </entity>
     <elements>
-        <element name="MADHourly" positionX="180" positionY="-15" width="128" height="268"/>
-        <element name="MADWeather" positionX="-63" positionY="-18" width="128" height="208"/>
         <element name="MADCity" positionX="-288" positionY="180" width="128" height="88"/>
+        <element name="MADHourly" positionX="180" positionY="-15" width="128" height="285"/>
+        <element name="MADWeather" positionX="-63" positionY="-18" width="128" height="208"/>
     </elements>
 </model>

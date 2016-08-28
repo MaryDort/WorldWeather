@@ -2,7 +2,7 @@
 //  MADHourly+CoreDataProperties.m
 //  MADWorldWeather
 //
-//  Created by Mariia Cherniuk on 23.08.16.
+//  Created by Mariia Cherniuk on 28.08.16.
 //  Copyright © 2016 marydort. All rights reserved.
 //
 //  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
@@ -26,7 +26,8 @@
 @dynamic weatherDesc;
 @dynamic weatherIconURL;
 @dynamic windSpeed;
-@dynamic weather;
+@dynamic weatherCode;
 @dynamic city;
+@dynamic weather;
 
 @end
